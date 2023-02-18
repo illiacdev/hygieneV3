@@ -70,24 +70,23 @@ input IrecordingPaper {
 
 
 #/////////////////////////////////////////////////////////////////////////////////
-#extend type Query {
-#
-#}
-#
-#extend type Mutation {
-#}
+extend type Query {
+    teams:[Team]
+}
 
-#type Member {
-#    memberID: MemberID
-#    team: Team
-#}
-#
-#type MemberID {
-#    fk_name: String
-#    name: String
-#}
-#
-#type Team {
-#members: [Member]
-#name: String
-#}
+extend type Mutation {
+    createTeam(name:String):Team
+    createMember(teamName:String, memberName:String):Team
+
+}
+
+type Member {
+    name: String
+    team: Team
+}
+
+type Team {
+    members: [Member]
+    name: String
+}
+

@@ -1,11 +1,16 @@
 package kr.co.has.hygiene.back_end.experimant;
 
-import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Embeddable
+//@Embeddable
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class MemberID implements Serializable {
-    String fk_name;
+    String team;
     String name;
 }
