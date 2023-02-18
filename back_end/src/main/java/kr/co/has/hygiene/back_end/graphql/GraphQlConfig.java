@@ -51,25 +51,19 @@ public class GraphQlConfig {
                 @Override
                 public String serialize(@NotNull Object dataFetcherResult) throws CoercingSerializeException {
                     LocalDateTime localDateTime = (LocalDateTime) dataFetcherResult;
-//                    String format = localDateTime.toString();
-                    String format = localDateTime.format(ISO_LOCAL_DATE_TIME);
-//                    String format = localDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-//                    return format;
-                    return format;
+                    return localDateTime.format(ISO_LOCAL_DATE_TIME);
                 }
 
                 @Override
                 public @NotNull LocalDateTime parseValue(@NotNull Object input) throws CoercingParseValueException {
                     LocalDateTime parse = LocalDateTime.parse((String) input, ISO_LOCAL_DATE_TIME);
-//                    LocalDateTime parse = LocalDateTime.now();
                     return parse;
                 }
 
                 @Override
                 public @NotNull
                 LocalDateTime parseLiteral(@NotNull Object input) throws CoercingParseLiteralException {
-//                    LocalDate parse = LocalDate.parse(((StringValue) input).getValue(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    LocalDateTime parse = LocalDateTime.now();
+                    LocalDateTime parse = LocalDateTime.parse(((StringValue) input).getValue(), ISO_LOCAL_DATE_TIME);
                     return parse;
                 }
             })

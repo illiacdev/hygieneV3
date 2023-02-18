@@ -4,9 +4,8 @@ import kr.co.has.hygiene.back_end.domain.*;
 import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 
 @org.springframework.stereotype.Service
@@ -14,22 +13,17 @@ import java.util.stream.Collectors;
 public class Service {
     private final RecordingPaperRepository recordingPaperRepository;
     private final RecordTypeRepository recordTypeRepository;
-    private final RecordPredefValueRepository recordPredefValueRepository;
+    private final RecordValidValueRepository recordValidValueRepository;
 
 
     @Transactional
-    public List<String> input_items(String typeName) {
-        return recordTypeRepository.findByName(typeName)
-                .map(recordType -> recordType.getPredefValues())
-                .map(recordPredefValues -> recordPredefValues.stream()
-                        .map(recordPredefValue -> recordPredefValue.getName())
-                        .collect(Collectors.toList()))
-                .orElse(new ArrayList<>());
+    public Optional<RecordType> recordType(String typeName) {
+        return recordTypeRepository.findByName(typeName);
     }
 
 
-    @Transactional
-    public RecordType addTypeItem(String typeName, String itemName) {
+    /*@Transactional
+    public RecordType createRecordValidValue(String typeName, String itemName) {
         RecordType recordType1 = recordTypeRepository.findByName(typeName).orElseGet(() -> {
             RecordType recordType = new RecordType();
             recordType.setName(typeName);
@@ -37,31 +31,41 @@ public class Service {
             return save;
         });
 
-        RecordPredefValue recordPredefValue = new RecordPredefValue();
-        recordPredefValue.setName(itemName);
-        RecordPredefValue save1 = recordPredefValueRepository.save(recordPredefValue);
+        RecordValidValue recordValidValue = new RecordValidValue();
+        recordValidValue.setName(itemName);
+        RecordValidValue save1 = recordValidValueRepository.save(recordValidValue);
         recordType1.add(save1);
 
         RecordType save = recordTypeRepository.save(recordType1);
         return save;
 
-    }
+    }*/
 
     @Transactional
-    public RecordType addType(String name) {
-        RecordType recordType = new RecordType();
-        recordType.setName(name);
+    public RecordType createRecordValidValue(String typeName, String itemName) {
+        RecordType recordType = recordTypeRepository.findByName(typeName)
+                .orElseGet(() -> recordTypeRepository.save(RecordType.builder().name(typeName).build()));
 
-        RecordType save = recordTypeRepository.save(recordType);
+        RecordValidValue recordValidValue = recordValidValueRepository.save(RecordValidValue.builder().recordType(recordType).name(itemName).build());
+        recordType.add(recordValidValue);
 
-        return save;
+        return recordTypeRepository.save(recordType);
+
     }
 
-    public RecordingPaper addRecordingPaper(RecordingPaper input) {
+
+    public RecordingPaper createRecordingPaper(RecordingPaper input) {
         return recordingPaperRepository.save(input);
     }
 
     public List<RecordingPaper> recordingPapers() {
         return recordingPaperRepository.findAll();
+    }
+
+
+    @Transactional
+
+    public List<RecordType> recordTypes() {
+        return recordTypeRepository.findAll();
     }
 }

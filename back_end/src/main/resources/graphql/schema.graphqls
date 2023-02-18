@@ -3,17 +3,37 @@ scalar LocalDateTime
 
 type Query {
     serverTime : LocalDateTime
-    input_items(name:String):[String]
-    recordingPapers:[RrecordingPaper]
 }
 
 type Mutation{
-    addType(name:String):String
-    addTypeItem(type_name:String,item_name:String):String
 
-    addRecordingPaper(input:IrecordingPaper):RrecordingPaper
 }
 
+#/////////////////////////////////////////////////////////////////////////////////
+extend type Query {
+    recordType(name:String!):RecordType
+    recordTypes:[RecordType]
+}
+extend type Mutation {
+    caeateRecordValidValue(type_name:String!,item_name:String!):RecordType
+}
+
+type RecordType{
+    name:String
+    recordValidValues:[RecordValidValue]
+}
+
+type RecordValidValue{
+    name:String
+}
+
+#////////////////////////////////////////////////////////////////////////////
+extend type Query {
+    recordingPapers:[RrecordingPaper]
+}
+extend type Mutation {
+    createRecordingPaper(input:IrecordingPaper!):RrecordingPaper
+}
 
 
 type RrecordingPaper {
@@ -49,4 +69,25 @@ input IrecordingPaper {
 }
 
 
+#/////////////////////////////////////////////////////////////////////////////////
+#extend type Query {
+#
+#}
+#
+#extend type Mutation {
+#}
 
+#type Member {
+#    memberID: MemberID
+#    team: Team
+#}
+#
+#type MemberID {
+#    fk_name: String
+#    name: String
+#}
+#
+#type Team {
+#members: [Member]
+#name: String
+#}
