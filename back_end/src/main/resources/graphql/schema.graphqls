@@ -11,15 +11,18 @@ type Mutation{
 
 #/////////////////////////////////////////////////////////////////////////////////
 extend type Query {
-    recordType(name:String!):RecordType
+    recordType(name:String!,type:String):RecordType
     recordTypes:[RecordType]
+    recordTypesTemplate(templateName:String):[RecordType]
 }
 extend type Mutation {
-    caeateRecordValidValue(type_name:String!,item_name:String!):RecordType
+    createRecordValidValue(type_name:String!,item_name:String!):RecordType
+    createRecord(name:String!,type:String):RecordType
 }
 
 type RecordType{
     name:String
+    type:String #bool #text #datetime
     recordValidValues:[RecordValidValue]
 }
 
@@ -29,14 +32,14 @@ type RecordValidValue{
 
 #////////////////////////////////////////////////////////////////////////////
 extend type Query {
-    recordingPapers:[RrecordingPaper]
+    recordingPapers:[RecordingPaper]
 }
 extend type Mutation {
-    createRecordingPaper(input:IrecordingPaper!):RrecordingPaper
+    createRecordingPaper(input:IrecordingPaper!):RecordingPaper
 }
 
 
-type RrecordingPaper {
+type RecordingPaper {
     id: ID
     action: String
     actionEndTime: LocalDateTime

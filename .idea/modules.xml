@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.example.back_end.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.example.back_end.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/front_end.iml" filepath="$PROJECT_DIR$/front_end.iml" />
       <module fileurl="file://$PROJECT_DIR$/hygiene.iml" filepath="$PROJECT_DIR$/hygiene.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hygieneV3.back_end.main.iml" filepath="$PROJECT_DIR$/.idea/modules/hygieneV3.back_end.main.iml" />
     </modules>
   </component>
 </project>

@@ -24,7 +24,7 @@ export const ComMiddle = () => {
               background: #0057aa;
               color: white;
               border-radius: .2em;
-              margin-left: 15em;
+              margin-left: 9em;
               padding: 1em;
               padding-top: .1em;
               padding-bottom: .1em;

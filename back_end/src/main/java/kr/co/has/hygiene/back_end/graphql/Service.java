@@ -4,6 +4,7 @@ import kr.co.has.hygiene.back_end.domain.*;
 import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,4 +69,85 @@ public class Service {
     public List<RecordType> recordTypes() {
         return recordTypeRepository.findAll();
     }
+
+    public RecordType createRecord(String name, String type) {
+        RecordType recordType = RecordType.builder().name(name).type(type).build();
+        return recordTypeRepository.save(recordType);
+
+    }
+
+    public List<RecordType> recordTypesTemplate(String templateName) {
+        ArrayList<RecordType> objects = new ArrayList<>();
+        if (templateName.equals("성빈센트")) {
+            recordTypeRepository.findByName("부서").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+            recordTypeRepository.findByName("직종").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+            recordTypeRepository.findByName("이름").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+            recordTypeRepository.findByName("장소").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+            recordTypeRepository.findByName("행위").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+            recordTypeRepository.findByName("세부행위").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+            recordTypeRepository.findByName("장갑").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+            recordTypeRepository.findByName("수행시작시간").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+            recordTypeRepository.findByName("수행종료시간").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+            recordTypeRepository.findByName("수행여부").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+
+        }
+
+
+        if (templateName.equals("세일병원")) {
+            recordTypeRepository.findByName("부서").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+            recordTypeRepository.findByName("직종").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+            recordTypeRepository.findByName("이름").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+            recordTypeRepository.findByName("장소").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+            recordTypeRepository.findByName("행위").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+            recordTypeRepository.findByName("장갑").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
+
+
+        }
+
+        return objects;
+    }
 }
+

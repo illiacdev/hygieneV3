@@ -22,6 +22,9 @@ public class RecordType {
     String name;
 
     @Builder.Default
+    String type = "text";//text , bool, dateTime...
+
+    @Builder.Default
     @OneToMany
     List<RecordValidValue> recordValidValues = new ArrayList<>();
 

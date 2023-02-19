@@ -17,13 +17,29 @@ public class Controller {
     private final Service service;
 
     @MutationMapping
-    RecordType caeateRecordValidValue(@Argument("type_name")String type_name, @Argument("item_name")String item_name) {
+    RecordType createRecord(
+            @Argument("name")String name,
+            @Argument("type")String type
+            ){
+        if(type == null)
+            type = "text";
+        return service.createRecord(name, type);
+    }
+    @MutationMapping
+    RecordType createRecordValidValue(@Argument("type_name")String type_name, @Argument("item_name")String item_name,@Argument("type")String type) {
         return service.createRecordValidValue(type_name, item_name);
     }
 
     @QueryMapping
     List<RecordType> recordTypes(){
         return service.recordTypes();
+    }
+
+
+    //recordTypesTemplet(templateName:String):[RecordType]
+    @QueryMapping
+    List<RecordType> recordTypesTemplate(@Argument("templateName")String templateName){
+        return service.recordTypesTemplate(templateName);
     }
 
     @QueryMapping
