@@ -1,7 +1,10 @@
 package kr.co.has.hygiene.back_end.graphql;
 
+import com.google.gson.Gson;
 import kr.co.has.hygiene.back_end.domain.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -149,5 +152,11 @@ public class Service {
 
         return objects;
     }
+
+
+    //@Data
+
+
+
 }
 

@@ -3,6 +3,8 @@ scalar LocalDateTime
 
 type Query {
     serverTime : LocalDateTime
+    tree:String
+
 }
 
 type Mutation{
