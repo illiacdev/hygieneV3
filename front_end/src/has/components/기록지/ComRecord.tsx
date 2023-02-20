@@ -1,14 +1,19 @@
 import React, {Component} from 'react';
 import {ComTop} from "./ComTop";
-import {store, T_Item} from "./Store";
+import {store} from "./Store";
 import {observer} from 'mobx-react';
 import {ComMiddle} from "./ComMiddle";
-import {Button, Checkbox, DatePicker, Drawer, Form, Select, Space} from "antd";
+import {Button, Checkbox, Drawer, Form, Input, Select, Space} from "antd";
 import {css} from "styled-components/macro";
 import {toJS} from "mobx";
 
 import "./Table.css"
 import ComSelectObserver from "./ComSelectObserver";
+import {Combobox} from "react-widgets/cjs";
+import "react-widgets/styles.css";
+import {RecordingPaper} from "../Types/RecordingPaper";
+import Optional from "optional-js";
+import _ from "lodash";
 
 
 const HeadRow = (props: { types: [{ name: string, type: string, recordValidValues: [{ name: string }] }] }) => {
@@ -35,33 +40,72 @@ const HeadRow = (props: { types: [{ name: string, type: string, recordValidValue
     );
 }
 
+const map = new Map<string, string>([
+    ["부서", "observeDepartment"],
+    ["직종", "observeOccupation"],
+    ["이름", "observeName"],
+    ["장갑", "glove"],
+    ["수행여부", "passFail"],
+    ["장소", "location"],
+    ["행위", "actionType"],
+    ["세부행위", "subAction"],
+])
 
-const Row = (props: { item: T_Item,index:number, types: [{ name: string, type: string, recordValidValues: [{ name: string }] }] }) => {
+
+function updateProp<TObj, K extends keyof TObj>(obj: TObj, key: K, value: TObj[K]) {
+    obj[key] = value;
+}
+
+function getProp<TObj, K extends keyof TObj>(obj: TObj, key: K) {
+    return obj[key];
+}
+
+
+const Row = (props: { data:RecordingPaper[];item: RecordingPaper, index: number, types: [{ name: string, type: string, recordValidValues: [{ name: string }] }] }) => {
 
     if (!props.types)
         return <></>
 
+    let {observeDepartment, observeOccupation, observeName, glove, passFail} = props.item;
 
     return (
         <tr>
             <td><Button onClick={() => {
                 store.openDrawer = true;
                 store.curr = props.index;
-                console.log('store.curr',store.curr)
+                console.log('store.curr', store.curr)
 
 
             }}>관찰대상선택</Button></td>
 
-            <td>부서</td>
-            <td>직종</td>
-            <td>성명</td>
+            <td>{observeDepartment}</td>
+            <td>{observeOccupation}</td>
+            <td>{observeName}</td>
             {props.types.map(value => {
 
+
                 // <td>
-                if (value.type == "bool")
+                if (value.type == "bool") {
+                    type ObjectKey = keyof typeof props.item;
+
+                    let orElse: boolean = Optional.ofNullable(map.get(value.name))
+                        .map(name => name as ObjectKey)
+                        // .map(fieldName => props.item[fieldName])
+                        .map(fieldName => store.data[props.index][fieldName])
+                        .orElse(true) as boolean;
                     return (
-                        <td><Checkbox>{value.name}</Checkbox></td>
-                    )
+                        <td><Checkbox onChange={e => {
+                            Optional.ofNullable(map.get(value.name))
+                                .map(name => name as ObjectKey)
+                                .ifPresent(value1 => {
+                                    updateProp(props.data[props.index], value1, e.target.checked);
+                                    props.data[props.index] = _.cloneDeep(props.data[props.index]);
+                                })
+
+                        }
+                        } checked={orElse}/></td>
+                    );
+                }
 
                 if (value.type == "chronometer")
                     return (
@@ -71,10 +115,35 @@ const Row = (props: { item: T_Item,index:number, types: [{ name: string, type: s
                         </>
                     )
 
-                if (value.type == "inputText")
+
+                if (value.type == "combobox")
                     return (
-                        <td><input type={"text"}/></td>
+                        <>
+                            <td><Combobox data={["Red", "Yellow", "Blue", "Orange"]}/></td>
+                        </>
                     )
+
+                if (value.type == "inputText"){
+                    type ObjectKey = keyof typeof props.item;
+                    let orElse: string = Optional.ofNullable(map.get(value.name))
+                        .map(name => name as ObjectKey)
+                        // .map(fieldName => props.item[fieldName])
+                        .map(fieldName => store.data[props.index][fieldName])
+                        .orElse("") as string;
+
+                    return (
+                        <td><Input type={"text"} value={orElse} onChange={v=>{
+                            console.log(v.target.value);
+                            Optional.ofNullable(map.get(value.name))
+                                .map(name => name as ObjectKey)
+                                .ifPresent(value1 => {
+                                    updateProp(props.data[props.index], value1, v.target.value);
+                                    props.data[props.index] = _.cloneDeep(props.data[props.index]);
+                                })
+                        }
+                        }/></td>
+                    )
+                }
 
 
                 let items = value.recordValidValues.map((value1: any) => {
@@ -82,11 +151,29 @@ const Row = (props: { item: T_Item,index:number, types: [{ name: string, type: s
                     })
                 ;
                 if (value.type == "select") {
+                    type ObjectKey = keyof typeof props.item;
+                    let orElse: string = Optional.ofNullable(map.get(value.name))
+                        .map(name => name as ObjectKey)
+                        // .map(fieldName => props.item[fieldName])
+                        .map(fieldName => store.data[props.index][fieldName])
+                        .orElse(true) as string;
+
                     return (
 
                         <td>
                             {/*<span>{value.name}</span>*/}
-                            <Select options={items}>{value.name}</Select>
+                            <Select onChange={value2 => {
+                                // console.log(JSON.stringify(value1));
+
+                                Optional.ofNullable(map.get(value.name))
+                                    .map(name => name as ObjectKey)
+                                    .ifPresent(value1 => {
+                                        updateProp(props.data[props.index], value1, value2);
+                                        props.data[props.index] = _.cloneDeep(props.data[props.index]);
+                                    })
+
+                            }
+                            } options={items}>{value.name}</Select>
                         </td>
                     )
                 }
@@ -138,7 +225,7 @@ class ComRecord extends Component {
                             store.add(item_count);
 
                         }}>관찰추가</Button>
-                        <Button>업로드</Button>
+                        <Button onClick={() => store.upload(store.data)}>업로드</Button>
                     </Space>
                 </div>
                 <hr/>
@@ -147,16 +234,19 @@ class ComRecord extends Component {
                     <table border={1} border-collapse={"collapse"}>
                         <HeadRow types={toJS(store.types)}/>
                         <tbody>
-                        {store.data.map((item,index) =>
-                            <Row types={toJS(store.types)} index={index} item={item}/>)}
+                        {store.data.map((item, index) =>
+                            <Row data={store.data} types={toJS(store.types)} index={index} item={item}/>)}
                         </tbody>
                     </table>
                 </div>
                 <Drawer width={'80%'} open={store.openDrawer} onClose={() => store.openDrawer = false}>
-                    <ComSelectObserver cb={(index, 부서, 직종, 성명) => {
-                        store.data[index]!.properties!.name!.value = 성명;
-                        store.data[index]!.properties!.occupation!.value = 직종;
-                        store.data[index]!.properties!.department!.value = 부서;
+                    <ComSelectObserver row_index={store.curr!} cb={(index, 부서, 직종, 성명) => {
+                        let tItem = store.data[index] as RecordingPaper;
+                        tItem!.observeName = 성명;
+                        tItem!.observeDepartment = 부서;
+                        tItem!.observeOccupation = 직종;
+                        console.log(toJS(tItem));
+                        store.openDrawer = false;
                     }
                     }/>
                 </Drawer>

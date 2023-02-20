@@ -15,6 +15,7 @@ class Store {
     부서: string = "";
     직종: string = "";
     이름: string = "";
+    curr_node_index: number | null = null;
 
     calcName() {
         if (this.nodes.length >= 3) {
@@ -43,36 +44,37 @@ const calcDepth = (node: Node, depth: number): number => {
     return calcDepth(node.parent, depth + 1);
 }
 
-const TreeNodes = (props: { nodes: Node[] }) => {
+const TreeNodes = (props: { nodes: Node[],row_index:number }) => {
     return (
-        <div>{props.nodes.map((value, index, array) => {
+        <div>{props.nodes.map((parentNode, index, array) => {
             return (
                 <div css={css``}>
                     <Space>
                         {
-                            value.nodes.map(value1 => {
+                            parentNode.nodes.map((chiledNode,index2) => {
                                 return (
                                     <Button onClick={() => {
-                                        console.log(value1)
 
                                         localStore.nodes = localStore.nodes.slice(0, index + 1);
-                                        localStore.nodes.push(value1);
+                                        localStore.nodes.push(chiledNode);
+                                        localStore.curr_node_index = props.row_index;
                                         // localStore.calcName();
-                                        let depth = calcDepth(value1, 0);
+                                        let depth = calcDepth(chiledNode, 0);
                                         console.log('calcDepth', depth);
 
-                                        if ((depth >= 3) && (value1.nodes.length == 0)) {
-                                            localStore.부서 = value1.parent!.parent!.name;
-                                            localStore.직종 = value1.parent!.name;
-                                            localStore.이름 = value1.name;
+                                        if ((chiledNode.myDepth() >= 3) && (chiledNode.isTerminalNode())) {
+                                        // if ((depth >= 3) && (chiledNode.nodes.length == 0)) {
+                                            localStore.부서 = chiledNode.parent!.parent!.name;
+                                            localStore.직종 = chiledNode.parent!.name;
+                                            localStore.이름 = chiledNode.name;
                                         } else {
                                             localStore.부서 = "";
                                             localStore.직종 = "";
                                             localStore.이름 = "";
                                         }
-                                        // localStore.nodes[index + 1] = value1;
+                                        // localStore.nodes[index + 1] = chiledNode;
                                     }
-                                    }>{value1.name}</Button>
+                                    }>{chiledNode.name}</Button>
                                 )
                             })
                         }
@@ -90,6 +92,18 @@ const TreeNodes = (props: { nodes: Node[] }) => {
         parent: Node | null = null;
         nodes: Node[] = [];
 
+        calcDepth = (node: Node, depth: number): number => {
+            if (node.parent == null)
+                return depth;
+            return this.calcDepth(node.parent, depth + 1);
+        }
+        myDepth(){
+            return this.calcDepth(this, 0);
+        }
+
+        isTerminalNode(){
+            return this.nodes.length == 0;
+        }
         add(node: Node) {
             this.nodes.push(node);
         }
@@ -110,7 +124,7 @@ const TreeNodes = (props: { nodes: Node[] }) => {
     }
 
 
-    class ComSelectObserver extends Component<{ cb: (index: number, 부서: string, 직종: string, 성명: string) => void }, any> {
+    class ComSelectObserver extends Component<{ row_index:number,cb: (index: number, 부서: string, 직종: string, 성명: string) => void }, any> {
         // state = {tree: undefined, group: []}
 
         componentDidMount() {
@@ -149,9 +163,17 @@ const TreeNodes = (props: { nodes: Node[] }) => {
                 return null;
 
             return (
-                <div>
-                    <TreeNodes nodes={toJS(localStore.nodes)}/>
+                <div >
+                    <TreeNodes nodes={toJS(localStore.nodes)} row_index={this.props.row_index}/>
                     {`${localStore.부서} - ${localStore.직종} - ${localStore.이름}`}
+                    <Button css={css`display: block;margin-top: 2em`
+
+                    }
+                            onClick={()=>{
+                                this.props.cb(localStore.curr_node_index!,localStore.부서,localStore.직종,localStore.이름)
+                            }
+                            }
+                    >관찰자확인</Button>
                 </div>
             );
         }

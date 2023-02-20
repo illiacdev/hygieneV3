@@ -4,72 +4,48 @@ import {Dayjs} from "dayjs";
 import {apollo_client} from "../../App";
 import {gql} from "@apollo/client";
 import {types} from "util";
+import {RecordingPaper} from "../Types/RecordingPaper";
 
-export type T_Item = {
-    "$schema"?: "https://json-schema.org/draft/2020-12/schema",
-    "type"?: "object",
-    "properties": {
-        action: {
-            "type": string;
-        },
-        "actionEndTime"?: {
-            "type": Dayjs
-        },
-        "actionStartTime"?: {
-            "type": Dayjs
-        },
-        "actionType"?: {
-            "type": string
-        },
-        "department"?: {
-            "type": string;
-            value: string;
 
-        },
-        "glove"?: {
-            "type": string
-        },
-        "id"?: {
-            "type": number
-        },
-        "location"?: {
-            "type": string
-        },
-        "name"?: {
-            "type": string;
-            value: string;
-        },
-        "observer"?: {
-            "type": string;
-            value: string;
-        },
-        "occupation"?: {
-            "type": string;
-            value: string;
-        },
-        "passFail"?: {
-            "type": string
-        },
-        "subAction"?: {
-            "type": string
-        }
-    }
-};
+
 
 
 
 class Store {
-    data: T_Item[] = [];
+    data: RecordingPaper[] = [];
 
     types: any = [];
     // types:
     openDrawer = false;
     curr: number | null = null;
+    upload(input:RecordingPaper[]){
+        apollo_client.mutate({
+            mutation:gql`
+                mutation createRecordingPapers($input:[IrecordingPaper]){
+                    createRecordingPapers(input:$input){
+                        action
+                    }
+                    
+                }
+            `,
+            variables:{
+                input
+            }
+
+        }).then(value => {
+            this.data = [];
+        }).catch(reason => {
+
+        })
+    };
 
 
     add(item_count: number) {
         for (let i = 0; i < item_count; i++)
-            this.data.unshift({properties: {action: {type: "접촉전"}}})
+            // this.data.unshift({properties: {action: {type: "접촉전"}}})
+            this.data.unshift(new RecordingPaper())
+
+
     };
 
     fetchTypes(templateName:string) {

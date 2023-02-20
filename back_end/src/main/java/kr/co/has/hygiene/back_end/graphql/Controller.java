@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import jakarta.persistence.Transient;
 import kr.co.has.hygiene.back_end.domain.RecordType;
 import kr.co.has.hygiene.back_end.domain.RecordingPaper;
+import kr.co.has.hygiene.back_end.domain.RecordingPaperRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -20,6 +21,8 @@ public class Controller {
 
     private final Service service;
 
+    /////////////////////////////////////////////////////////////
+    //#기준정보
     @MutationMapping
     List<RecordType> initDB(){
         return service.initDB();
@@ -57,9 +60,21 @@ public class Controller {
         return service.recordType(type_name);
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //#기록지
+
+    //기록1건 저장.
     @MutationMapping
     RecordingPaper createRecordingPaper(@Argument("input") RecordingPaper input) {
         return service.createRecordingPaper(input);
+    }
+
+    //기록목록 저장
+    @MutationMapping
+    List<RecordingPaper>  createRecordingPapers(@Argument("input")List<RecordingPaper> paperList){
+        return service.createRecordingPapers(paperList);
+
     }
 
     @QueryMapping
@@ -82,6 +97,8 @@ public class Controller {
         }
     }
 
+
+    //부서,직종,성명트리
     @QueryMapping
     String tree() {
        /* Node root = Node.builder().name("root").build();
@@ -105,11 +122,14 @@ public class Controller {
         Node 간호부 = root.add(Node.builder().name("간호부").build());
         Node 진료부 = root.add(Node.builder().name("진료부").build());
         Node 진료지원 = root.add(Node.builder().name("진료지원").build());
+
         Node 기타 = root.add(Node.builder().name("기타").build());
 
 
+
         Node 가정의학과 = 진료부.add(Node.builder().name("가정의학과").build());
-        가정의학과.add(Node.builder().name("홍길동").build());
+        Node 의사 = 가정의학과.add(Node.builder().name("의사").build());
+        의사.add(Node.builder().name("홍길동").build());
 
         진료부.add(Node.builder().name("간·담,·,췌외과").build());
         진료부.add(Node.builder().name("감염내과").build());
@@ -118,7 +138,8 @@ public class Controller {
         진료부.add(Node.builder().name("대장·항문외과,").build());
 
 
-        기타.add(Node.builder().name("기타").build());
+        Node 기타직종 = 기타.add(Node.builder().name("기타직종").build());
+        기타직종.add(Node.builder().name("김기타").build());
 
 
         String s = new Gson().toJson(root).toString();

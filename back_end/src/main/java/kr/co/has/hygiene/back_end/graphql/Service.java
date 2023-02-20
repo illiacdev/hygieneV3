@@ -191,6 +191,13 @@ public class Service {
         return recordTypeRepository.findAll();
     }
 
+    public List<RecordingPaper> createRecordingPapers(List<RecordingPaper> paperList) {
+        paperList.forEach(recordingPaper -> {
+            recordingPaperRepository.save(recordingPaper);
+        });
+        return null;
+    }
+
 
     //@Data
 

@@ -40,6 +40,15 @@ dependencies {
 
 }
 
+
+bootJar {
+    destinationDirectory = file("./dist/")
+//	destinationDirectory = 'x:'
+
+    archiveFileName = 'app.jar'
+}
+
+
 tasks.named('test') {
     useJUnitPlatform()
 }

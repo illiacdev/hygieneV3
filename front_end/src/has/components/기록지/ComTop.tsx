@@ -1,16 +1,22 @@
 import styled from "styled-components";
 import {css} from "styled-components/macro";
 import logo from '../../resources/logo.png';
+import {Button} from "antd";
+import {useNavigate} from "react-router-dom";
 
 const StyledSpan = styled.span`
   //margin-left: 2em;
   font-size: 1.5em;
-  font-weight: bold
-
+  font-weight: bold;
+  ${props => props.css};
 `;
 
 
 export const ComTop = () => {
+    const navigate = useNavigate();
+//localStorage.removeItem("auth_token");
+    if(!localStorage.getItem("auth_token"))
+        navigate("/login");
     return (
         <div css={css`;
           display: flex;`}>
@@ -31,7 +37,11 @@ export const ComTop = () => {
                     <StyledSpan>역학조사(설문)</StyledSpan>
                     <StyledSpan>역학조사(관리)</StyledSpan>
                     <StyledSpan>감염관리 웹 인터페이스 Ver 1.0</StyledSpan>
-                    <StyledSpan>로그아웃</StyledSpan>
+                    <Button css={css`cursor: pointer`} onClick={event => {
+                        localStorage.removeItem("auth_token");
+                        navigate('/login');
+                    }
+                    }>로그아웃</Button>
                 </div>
             </div>
         </div>

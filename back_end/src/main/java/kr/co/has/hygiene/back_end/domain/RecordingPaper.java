@@ -21,7 +21,7 @@ public class RecordingPaper {
     String location;
     String action;
     String subAction;
-    String glove;
+    Boolean glove;
     LocalDateTime actionStartTime;
     LocalDateTime actionEndTime;
     String actionType;

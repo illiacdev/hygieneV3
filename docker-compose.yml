@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  proxy:
+    build: ./proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+        - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - front_end
+      - back_end
+#      - dbms
+  back_end:
+    build: ./back_end
+#    volumes:
+#      - has_db:/usr/src/myapp/H.A.S
+#      - /home/ec2-user/has_db:/usr/src/myapp/H.A.S
+    depends_on:
+      - mysql
+    #    container_name: 'illiac'
+#    ports:
+#      - 8080:8080
+#
+  mysql:
+    image: mysql:8
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+#      MYSQL_ROOT_PASSWORD: 9999
+    volumes:
+      - mysql_volume:/var/lib/mysql
+
+  front_end:
+    build: ./front_end
+
+volumes:
+  mysql_volume:
+
+networks:
+  has_net:
+    driver: bridge
+
+
+

@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import ComRecord from "./components/기록지/ComRecord";
 import {ApolloClient, ApolloLink, HttpLink, InMemoryCache} from "@apollo/client";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import ReportPaperTable from "./components/관리자/ReportPaperTable";
+import Login from "./components/auth/Login";
+import Dev from "./experiment/Dev";
 
 
 // const httpLink = new HttpLink({ uri: 'https://api.example.com/graphql' });
@@ -32,9 +36,15 @@ export const apollo_client = new ApolloClient({
 class App extends Component {
     render() {
         return (
-            <div>
-                <ComRecord/>
-            </div>
+            <BrowserRouter>
+                <Routes>
+                    <Route path={"/"} element={<ComRecord/>}/>
+                    <Route path={"/login"} element={<Login title={"손위생 기록지 관리시스템"}/>}/>
+                    <Route path={"/report_list"} element={<ReportPaperTable/>}/>
+                    <Route path={"/dev"} element={<Dev/>}/>
+
+                </Routes>
+            </BrowserRouter>
         );
     }
 }
