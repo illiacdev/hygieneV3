@@ -14,6 +14,7 @@ import "react-widgets/styles.css";
 import {RecordingPaper} from "../Types/RecordingPaper";
 import Optional from "optional-js";
 import _ from "lodash";
+import {Util} from "../../common/Util";
 
 
 const HeadRow = (props: { types: [{ name: string, type: string, recordValidValues: [{ name: string }] }] }) => {
@@ -61,7 +62,7 @@ function getProp<TObj, K extends keyof TObj>(obj: TObj, key: K) {
 }
 
 
-const Row = (props: { data:RecordingPaper[];item: RecordingPaper, index: number, types: [{ name: string, type: string, recordValidValues: [{ name: string }] }] }) => {
+const Row = (props: { data: RecordingPaper[]; item: RecordingPaper, index: number, types: [{ name: string, type: string, recordValidValues: [{ name: string }] }] }) => {
 
     if (!props.types)
         return <></>
@@ -83,28 +84,17 @@ const Row = (props: { data:RecordingPaper[];item: RecordingPaper, index: number,
             <td>{observeName}</td>
             {props.types.map(value => {
 
-
-                // <td>
                 if (value.type == "bool") {
-                    type ObjectKey = keyof typeof props.item;
+                    let onChange = (e: any) => {
+                        let checked: boolean = e.target.checked;
+                        Util.updateProp2(props.item, map.get(value.name)!, checked);
+                        props.data[props.index] = _.cloneDeep(props.data[props.index]);
+                    }
 
-                    let orElse: boolean = Optional.ofNullable(map.get(value.name))
-                        .map(name => name as ObjectKey)
-                        // .map(fieldName => props.item[fieldName])
-                        .map(fieldName => store.data[props.index][fieldName])
-                        .orElse(true) as boolean;
-                    return (
-                        <td><Checkbox onChange={e => {
-                            Optional.ofNullable(map.get(value.name))
-                                .map(name => name as ObjectKey)
-                                .ifPresent(value1 => {
-                                    updateProp(props.data[props.index], value1, e.target.checked);
-                                    props.data[props.index] = _.cloneDeep(props.data[props.index]);
-                                })
-
-                        }
-                        } checked={orElse}/></td>
-                    );
+                    return Optional.ofNullable(map.get(value.name))
+                        .map(fieldName => Util.getProp2(props.item, fieldName))
+                        .map(value => <td><Checkbox onChange={onChange} checked={value as boolean}/></td>)
+                            .orElse(<p>{`${value.name}와(과) bind된 오브젝트 속성이 없습니다.`}</p>)
                 }
 
                 if (value.type == "chronometer")
@@ -123,16 +113,29 @@ const Row = (props: { data:RecordingPaper[];item: RecordingPaper, index: number,
                         </>
                     )
 
-                if (value.type == "inputText"){
+                if (value.type == "inputText") {
+
+                    // return <p>{map.get(value.name)}</p>
+                   /* let onChange = (e: any) => {
+                        let e_value = e.target.value;
+                        Util.updateProp2(props.item, map.get(value.name)!, e_value);
+                        props.data[props.index] = _.cloneDeep(props.data[props.index]);
+                    }
+
+                    return Optional.ofNullable(map.get(value.name))
+                        .map(fieldName => Util.getProp2(props.item, fieldName))
+                        .map(value => <td><Input type={"text"} onChange={onChange} value={value as string}/></td>)
+                        .orElse(<p>{`${value.name}와(과) bind된 오브젝트 속성이 없습니다.`}</p>)*/
+
+
                     type ObjectKey = keyof typeof props.item;
                     let orElse: string = Optional.ofNullable(map.get(value.name))
                         .map(name => name as ObjectKey)
-                        // .map(fieldName => props.item[fieldName])
                         .map(fieldName => store.data[props.index][fieldName])
                         .orElse("") as string;
 
                     return (
-                        <td><Input type={"text"} value={orElse} onChange={v=>{
+                        <td><Input type={"text"} value={orElse} onChange={v => {
                             console.log(v.target.value);
                             Optional.ofNullable(map.get(value.name))
                                 .map(name => name as ObjectKey)
@@ -186,74 +189,74 @@ const Row = (props: { data:RecordingPaper[];item: RecordingPaper, index: number,
     )
 }
 
-class ComRecord extends Component {
+    class ComRecord extends Component {
 
-    form: any;
+        form: any;
 
 
-    componentDidMount() {
-        // store.fetchTypes("세일병원");
-        store.fetchTypes("성빈센트");
+        componentDidMount() {
+            // store.fetchTypes("세일병원");
+            store.fetchTypes("성빈센트");
+        }
+
+        render() {
+            return (
+                <div css={css`padding: 1em`}>
+                    <ComTop/>
+                    <ComMiddle/>
+                    <div css={css`display: flex;
+                      flex-direction: row-reverse`}>
+                        <Space>
+                            <Form ref={ref => this.form = ref} initialValues={{addCount: 1}}>
+                                <Form.Item name={"addCount"}>
+                                    <Select options={[
+                                        {value: 1, label: '1명'},
+                                        {value: 2, label: '2명'},
+                                        {value: 3, label: '3명'},
+                                        {value: 4, label: '4명'},
+                                        {value: 5, label: '5명'},
+                                    ]}>
+
+                                    </Select>
+                                </Form.Item>
+                            </Form>
+                            <Button onClick={() => {
+                                let item_count = this.form.getFieldValue("addCount");
+                                console.log('fieldsValue', item_count);
+
+                                console.log('onClick!');
+                                store.add(item_count);
+
+                            }}>관찰추가</Button>
+                            <Button onClick={() => store.upload(store.data)}>업로드</Button>
+                        </Space>
+                    </div>
+                    <hr/>
+
+                    <div css={css`overflow: auto`}>
+                        <table border={1} border-collapse={"collapse"}>
+                            <HeadRow types={toJS(store.types)}/>
+                            <tbody>
+                            {store.data.map((item, index) =>
+                                <Row data={store.data} types={toJS(store.types)} index={index} item={item}/>)}
+                            </tbody>
+                        </table>
+                    </div>
+                    <Drawer width={'80%'} open={store.openDrawer} onClose={() => store.openDrawer = false}>
+                        <ComSelectObserver row_index={store.curr!} cb={(index, 부서, 직종, 성명) => {
+                            let tItem = store.data[index] as RecordingPaper;
+                            tItem!.observeName = 성명;
+                            tItem!.observeDepartment = 부서;
+                            tItem!.observeOccupation = 직종;
+                            console.log(toJS(tItem));
+                            store.openDrawer = false;
+                        }
+                        }/>
+                    </Drawer>
+                </div>
+            );
+        }
     }
 
-    render() {
-        return (
-            <div css={css`padding: 1em`}>
-                <ComTop/>
-                <ComMiddle/>
-                <div css={css`display: flex;
-                  flex-direction: row-reverse`}>
-                    <Space>
-                        <Form ref={ref => this.form = ref} initialValues={{addCount: 1}}>
-                            <Form.Item name={"addCount"}>
-                                <Select options={[
-                                    {value: 1, label: '1명'},
-                                    {value: 2, label: '2명'},
-                                    {value: 3, label: '3명'},
-                                    {value: 4, label: '4명'},
-                                    {value: 5, label: '5명'},
-                                ]}>
 
-                                </Select>
-                            </Form.Item>
-                        </Form>
-                        <Button onClick={() => {
-                            let item_count = this.form.getFieldValue("addCount");
-                            console.log('fieldsValue', item_count);
-
-                            console.log('onClick!');
-                            store.add(item_count);
-
-                        }}>관찰추가</Button>
-                        <Button onClick={() => store.upload(store.data)}>업로드</Button>
-                    </Space>
-                </div>
-                <hr/>
-
-                <div css={css`overflow: auto`}>
-                    <table border={1} border-collapse={"collapse"}>
-                        <HeadRow types={toJS(store.types)}/>
-                        <tbody>
-                        {store.data.map((item, index) =>
-                            <Row data={store.data} types={toJS(store.types)} index={index} item={item}/>)}
-                        </tbody>
-                    </table>
-                </div>
-                <Drawer width={'80%'} open={store.openDrawer} onClose={() => store.openDrawer = false}>
-                    <ComSelectObserver row_index={store.curr!} cb={(index, 부서, 직종, 성명) => {
-                        let tItem = store.data[index] as RecordingPaper;
-                        tItem!.observeName = 성명;
-                        tItem!.observeDepartment = 부서;
-                        tItem!.observeOccupation = 직종;
-                        console.log(toJS(tItem));
-                        store.openDrawer = false;
-                    }
-                    }/>
-                </Drawer>
-            </div>
-        );
-    }
-}
-
-
-export default observer(ComRecord);
+    export default observer(ComRecord);

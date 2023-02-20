@@ -13,6 +13,18 @@ function getProp<TObj, K extends keyof TObj>(obj: TObj, key: K) {
     return obj[key] ;
 }
 
+
+
+function updateProp2<TObj, K extends keyof TObj>(obj: TObj, key: string, value: TObj[K]) {
+    obj[key as K] = value;
+}
+
+function getProp2<TObj>(obj: TObj, key: string) {
+    type T_Key = keyof typeof obj;
+    return obj[key as T_Key] ;
+}
+
+
 it('should ', function () {
     let obj = new A();
     let fname_name = "name";
@@ -25,8 +37,11 @@ it('should ', function () {
     // const myVar = fname_age as ObjectKey
 
     console.log(getProp(obj,myVar));
-    updateProp(obj, myVar, "changed_namew");
+    updateProp2(obj, "name", "changed_namew");
     console.log(obj[myVar]);
+
+
+    console.log(getProp2(obj, "name"));
 
 
     // obj[myVar] = "test";
