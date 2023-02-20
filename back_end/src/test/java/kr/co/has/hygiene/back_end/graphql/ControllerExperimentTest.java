@@ -1,5 +1,7 @@
 package kr.co.has.hygiene.back_end.graphql;
 
+import kr.co.has.hygiene.back_end.domain.RecordType;
+import kr.co.has.hygiene.back_end.domain.RecordTypeRepository;
 import kr.co.has.hygiene.back_end.experimant.Member;
 import kr.co.has.hygiene.back_end.experimant.MemberRepository;
 import kr.co.has.hygiene.back_end.experimant.Team;
@@ -10,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +26,8 @@ class ControllerExperimentTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @Autowired
+    RecordTypeRepository recordTypeRepository;
     @Transactional
     @Test
     void name() {
@@ -50,5 +56,11 @@ class ControllerExperimentTest {
 //        System.out.println(save);
 //        System.out.println(save.getMembers());
 
+    }
+
+    @Test
+    void nameTypes() {
+        List<RecordType> byNameIn = recordTypeRepository.findByNameIn(Arrays.asList("부서", "직종", "이름", "장소", "행위", "장갑", "수행시작시간", "수행종료시간", "수행여부"));
+        System.out.println(byNameIn);
     }
 }

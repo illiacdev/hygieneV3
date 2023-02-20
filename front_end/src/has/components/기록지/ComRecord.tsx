@@ -16,19 +16,27 @@ const HeadRow = (props: { types: [{ name: string, type: string, recordValidValue
         <thead>
         <tr>
             <th>관찰대상선택</th>
+            <th>부서</th>
+            <th>직종</th>
+            <th>성명</th>
             {props.types.map(value => {
-                if (value.name == "수행시작시간")
-                    return (<th>수행시간</th>)
+                if (value.name === "수행시간")
+                    return (
+                        <>
+                            <th>수행시간</th>
+                            <th>수행시간</th>
+                        </>
+                    )
 
-                if (value.name == "수행종료시간")
-                    return (<th></th>)
                 return (<th>{value.name}</th>)
             })}
         </tr>
         </thead>
     );
 }
-const Row = (props: { item: T_Item, types: [{ name: string, type: string, recordValidValues: [{ name: string }] }] }) => {
+
+
+const Row = (props: { item: T_Item,index:number, types: [{ name: string, type: string, recordValidValues: [{ name: string }] }] }) => {
 
     if (!props.types)
         return <></>
@@ -36,19 +44,18 @@ const Row = (props: { item: T_Item, types: [{ name: string, type: string, record
 
     return (
         <tr>
-            <td><Button onClick={()=>store.openDrawer = true}>관찰대상선택</Button></td>
+            <td><Button onClick={() => {
+                store.openDrawer = true;
+                store.curr = props.index;
+                console.log('store.curr',store.curr)
 
+
+            }}>관찰대상선택</Button></td>
+
+            <td>부서</td>
+            <td>직종</td>
+            <td>성명</td>
             {props.types.map(value => {
-
-
-                if (value.type == "displayonly")
-                    return (<th><span>{value.name}</span></th>)
-
-                if (value.name == "수행시작시간")
-                    return (<th><input type={"number"}/></th>)
-
-                if (value.name == "수행종료시간")
-                    return (<th><Button>시작</Button></th>)
 
                 // <td>
                 if (value.type == "bool")
@@ -56,9 +63,12 @@ const Row = (props: { item: T_Item, types: [{ name: string, type: string, record
                         <td><Checkbox>{value.name}</Checkbox></td>
                     )
 
-                if (value.type == "dateTime")
+                if (value.type == "chronometer")
                     return (
-                        <td><DatePicker/></td>
+                        <>
+                            <td><input type={"number"}/></td>
+                            <td><Button>시작</Button></td>
+                        </>
                     )
 
                 if (value.type == "inputText")
@@ -71,8 +81,7 @@ const Row = (props: { item: T_Item, types: [{ name: string, type: string, record
                         return {value: value1.name, label: value1.name}
                     })
                 ;
-                if (value.type == "text") {
-
+                if (value.type == "select") {
                     return (
 
                         <td>
@@ -138,13 +147,18 @@ class ComRecord extends Component {
                     <table border={1} border-collapse={"collapse"}>
                         <HeadRow types={toJS(store.types)}/>
                         <tbody>
-                        {store.data.map(item =>
-                            <Row types={toJS(store.types)} item={item}/>)}
+                        {store.data.map((item,index) =>
+                            <Row types={toJS(store.types)} index={index} item={item}/>)}
                         </tbody>
                     </table>
                 </div>
-                <Drawer width={'80%'} open={store.openDrawer} onClose={()=>store.openDrawer = false} >
-                    <ComSelectObserver/>
+                <Drawer width={'80%'} open={store.openDrawer} onClose={() => store.openDrawer = false}>
+                    <ComSelectObserver cb={(index, 부서, 직종, 성명) => {
+                        store.data[index]!.properties!.name!.value = 성명;
+                        store.data[index]!.properties!.occupation!.value = 직종;
+                        store.data[index]!.properties!.department!.value = 부서;
+                    }
+                    }/>
                 </Drawer>
             </div>
         );

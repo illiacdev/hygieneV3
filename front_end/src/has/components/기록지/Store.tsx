@@ -10,7 +10,7 @@ export type T_Item = {
     "type"?: "object",
     "properties": {
         action: {
-            "type": string
+            "type": string;
         },
         "actionEndTime"?: {
             "type": Dayjs
@@ -22,7 +22,9 @@ export type T_Item = {
             "type": string
         },
         "department"?: {
-            "type": string
+            "type": string;
+            value: string;
+
         },
         "glove"?: {
             "type": string
@@ -34,13 +36,16 @@ export type T_Item = {
             "type": string
         },
         "name"?: {
-            "type": string
+            "type": string;
+            value: string;
         },
         "observer"?: {
-            "type": string
+            "type": string;
+            value: string;
         },
         "occupation"?: {
-            "type": string
+            "type": string;
+            value: string;
         },
         "passFail"?: {
             "type": string
@@ -59,6 +64,7 @@ class Store {
     types: any = [];
     // types:
     openDrawer = false;
+    curr: number | null = null;
 
 
     add(item_count: number) {
@@ -77,8 +83,10 @@ class Store {
                             name
                         }
                     }
-                }
-            `,variables:{
+                },
+            `,
+            fetchPolicy: "no-cache"
+            ,variables:{
                 templateName
             }
         }).then(value => {
@@ -94,6 +102,9 @@ class Store {
 
     }
 
+    onSelectRow(index:number){
+
+    }
     constructor() {
         makeAutoObservable(this);
     }

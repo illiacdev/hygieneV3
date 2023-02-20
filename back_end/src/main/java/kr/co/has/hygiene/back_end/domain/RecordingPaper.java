@@ -25,7 +25,7 @@ public class RecordingPaper {
     LocalDateTime actionStartTime;
     LocalDateTime actionEndTime;
     String actionType;
-    String passFail;
+    Boolean passFail;
     String observer;
 
 }

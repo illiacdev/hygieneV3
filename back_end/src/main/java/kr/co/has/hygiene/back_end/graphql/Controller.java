@@ -21,6 +21,11 @@ public class Controller {
     private final Service service;
 
     @MutationMapping
+    List<RecordType> initDB(){
+        return service.initDB();
+    }
+
+    @MutationMapping
     RecordType createRecord(
             @Argument("name") String name,
             @Argument("type") String type
@@ -103,7 +108,9 @@ public class Controller {
         Node 기타 = root.add(Node.builder().name("기타").build());
 
 
-        진료부.add(Node.builder().name("가정의학과").build());
+        Node 가정의학과 = 진료부.add(Node.builder().name("가정의학과").build());
+        가정의학과.add(Node.builder().name("홍길동").build());
+
         진료부.add(Node.builder().name("간·담,·,췌외과").build());
         진료부.add(Node.builder().name("감염내과").build());
         진료부.add(Node.builder().name("갑상선내분비외과").build());
