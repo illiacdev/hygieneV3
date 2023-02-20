@@ -93,14 +93,14 @@ const Row = (props: { data: RecordingPaper[]; item: RecordingPaper, index: numbe
 
                     return Optional.ofNullable(map.get(value.name))
                         .map(fieldName => Util.getProp2(props.item, fieldName))
-                        .map(value => <td><Checkbox onChange={onChange} checked={value as boolean}/></td>)
+                        .map(value => <td align={"center"}><Checkbox  onChange={onChange} checked={value as boolean}/></td>)
                             .orElse(<p>{`${value.name}와(과) bind된 오브젝트 속성이 없습니다.`}</p>)
                 }
 
                 if (value.type == "chronometer")
                     return (
                         <>
-                            <td><input type={"number"}/></td>
+                            <td><Input  type={"number"}/></td>
                             <td><Button>시작</Button></td>
                         </>
                     )
