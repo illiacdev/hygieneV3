@@ -5,6 +5,7 @@ import {apollo_client} from "../../App";
 import {gql} from "@apollo/client";
 import {types} from "util";
 import {RecordingPaper} from "../Types/RecordingPaper";
+import {List} from "immutable";
 
 
 
@@ -85,6 +86,13 @@ class Store {
         makeAutoObservable(this);
     }
 
+    delete(index: number) {
+        console.log(index);
+        let list = List(this.data);
+        let list1 = list.delete(index);
+        this.data = list1.toArray();
+
+    }
 }
 
 export const store = new Store();

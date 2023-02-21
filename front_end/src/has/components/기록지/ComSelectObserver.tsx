@@ -6,7 +6,7 @@ import {makeAutoObservable, toJS} from "mobx";
 import {store} from "./Store";
 import {observer} from "mobx-react";
 import {css} from "styled-components/macro";
-
+import {tree_file} from "../../resources/tree";
 
 class Store {
 
@@ -128,6 +128,7 @@ const TreeNodes = (props: { nodes: Node[],row_index:number }) => {
         // state = {tree: undefined, group: []}
 
         componentDidMount() {
+
             apollo_client.query({
                 query: gql`
                     query {
@@ -145,6 +146,7 @@ const TreeNodes = (props: { nodes: Node[],row_index:number }) => {
                 localStore.root = new Node("root", null);
                 localStore.nodes = [];
 
+                nodes = tree_file.nodes;
                 init(localStore.root, nodes);
                 localStore.nodes.push(localStore.root);
                 console.log(localStore.root);

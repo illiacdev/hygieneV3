@@ -1,10 +1,8 @@
 package kr.co.has.hygiene.back_end.graphql;
 
 import com.google.gson.Gson;
-import jakarta.persistence.Transient;
 import kr.co.has.hygiene.back_end.domain.RecordType;
 import kr.co.has.hygiene.back_end.domain.RecordingPaper;
-import kr.co.has.hygiene.back_end.domain.RecordingPaperRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -91,9 +89,17 @@ public class Controller {
         @Builder.Default
         public List<Node> nodes = new ArrayList<>();
 
+        public Optional<Node> get(String name){
+            return  nodes.stream().filter(node -> node.name.equals(name)).findFirst();
+        }
         public Node add(Node node) {
             nodes.add(node);
             return node;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s - %s",name,nodes.toString());
         }
     }
 

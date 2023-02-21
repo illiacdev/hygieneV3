@@ -36,6 +36,7 @@ const HeadRow = (props: { types: [{ name: string, type: string, recordValidValue
 
                 return (<th>{value.name}</th>)
             })}
+            <th>삭제</th>
         </tr>
         </thead>
     );
@@ -165,7 +166,7 @@ const Row = (props: { data: RecordingPaper[]; item: RecordingPaper, index: numbe
 
                         <td>
                             {/*<span>{value.name}</span>*/}
-                            <Select onChange={value2 => {
+                            <Select value={orElse} onChange={value2 => {
                                 // console.log(JSON.stringify(value1));
 
                                 Optional.ofNullable(map.get(value.name))
@@ -179,12 +180,15 @@ const Row = (props: { data: RecordingPaper[]; item: RecordingPaper, index: numbe
                             } options={items}>{value.name}</Select>
                         </td>
                     )
+                    
                 }
 
                 return (
                     <tr>{value.name}미구현</tr>
                 )
-            })}
+            })
+            }
+            <td><Button onClick={ ()=>store.delete(props.index)}>삭제</Button></td>
         </tr>
     )
 }
