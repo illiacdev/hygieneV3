@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {RecordingPaper} from "../Types/RecordingPaper";
-import {Table} from "antd";
+import {Button, Table} from "antd";
 import {apollo_client} from "../../App";
 import {gql} from "@apollo/client";
 import {makeAutoObservable, makeObservable, observable} from "mobx";
@@ -12,6 +12,58 @@ class Store {
     dataSource: RecordingPaper[] = [];
     constructor() {
         makeAutoObservable(this);
+    }
+
+    load() {
+        apollo_client.query({
+            query:gql`
+                query {
+                    recordingPapers {
+                        id
+                        action
+                        observeDepartment
+                        observeOccupation
+                        observeName
+                        glove
+                        passFail
+                        location
+                        actionType
+                        subAction
+
+                    }
+                }
+            `
+            ,fetchPolicy:"no-cache"
+        }).then(value => {
+            this.dataSource = value.data.recordingPapers;
+            let s = JSON.stringify(value.data.recordingPapers);
+            console.log(s);
+        }).catch(reason => {
+
+        })
+    }
+
+
+    delete(id: any) {
+        apollo_client.mutate({
+            mutation:gql`
+                mutation deleteRecordingPaper($id:ID){
+                    deleteRecordingPaper(id: $id)
+                }
+            `,
+            variables:{
+                id
+
+            }
+            ,
+            fetchPolicy:"no-cache"
+
+        }).then(value => {
+            console.log(value.data.deleteRecordingPaper);
+            this.load();
+        }).catch(reason => {
+
+        })
     }
 }
 
@@ -55,14 +107,22 @@ const columns = [
 
     ,{
         // key: "",
-        title: "glove",
+        title: "장갑",
         dataIndex: "glove",
+        render:(item:any)=><span>{JSON.stringify(item)}</span>
     }
 
     ,{
         // key: "",
-        title: "passFail",
+        title: "수행여부",
         dataIndex: "passFail",
+        render:(item:any)=><span>{JSON.stringify(item)}</span>
+    }
+    ,{
+        // key: "",
+        title: "",
+        dataIndex: "id",
+        render:(item:any)=><Button onClick={()=>store.delete(item)} >삭제</Button>
     }
 
 ]
@@ -78,7 +138,7 @@ class ReportPaperTable extends Component<any,any> {
 
     componentDidMount() {
 
-        this.load();
+        store.load();
     }
 
     render() {
@@ -90,32 +150,6 @@ class ReportPaperTable extends Component<any,any> {
         );
     }
 
-    private load() {
-        apollo_client.query({
-            query:gql`
-                query {
-                    recordingPapers {
-                        id
-                        action
-                        observeDepartment
-                        observeOccupation
-                        observeName
-                        glove
-                        passFail
-                        location
-                        actionType
-                        subAction
-                        
-                    }
-                }
-            `
-            ,fetchPolicy:"no-cache"
-        }).then(value => {
-            store.dataSource = value.data.recordingPapers;
-        }).catch(reason => {
-
-        })
-    }
 }
 
 

@@ -46,10 +46,10 @@ const calcDepth = (node: Node, depth: number): number => {
 
 const TreeNodes = (props: { nodes: Node[],row_index:number }) => {
     return (
-        <div>{props.nodes.map((parentNode, index, array) => {
+        <div css={css``}>{props.nodes.map((parentNode, index, array) => {
             return (
                 <div css={css``}>
-                    <Space>
+                    <Space wrap>
                         {
                             parentNode.nodes.map((chiledNode,index2) => {
                                 return (

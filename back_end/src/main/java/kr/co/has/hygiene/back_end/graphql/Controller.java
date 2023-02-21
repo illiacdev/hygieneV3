@@ -103,6 +103,11 @@ public class Controller {
         }
     }
 
+    @MutationMapping
+    public String deleteRecordingPaper(@Argument("id")Long id){
+
+        return service.deleteRecordingPaper(id);
+    }
 
     //부서,직종,성명트리
     @QueryMapping

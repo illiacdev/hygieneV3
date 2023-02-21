@@ -41,6 +41,8 @@ class App extends Component {
                     <Route path={"/"} element={<ComRecord/>}/>
                     <Route path={"/login"} element={<Login title={"손위생 기록지 관리시스템"}/>}/>
                     <Route path={"/report_list"} element={<ReportPaperTable/>}/>
+                    <Route path={"/report"} element={<ReportPaperTable/>}/>
+                    <Route path={"/list"} element={<ReportPaperTable/>}/>
                     <Route path={"/dev"} element={<Dev/>}/>
 
                 </Routes>

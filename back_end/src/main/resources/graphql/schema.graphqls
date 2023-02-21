@@ -39,6 +39,7 @@ extend type Query {
 extend type Mutation {
     createRecordingPaper(input:IrecordingPaper!):RecordingPaper
     createRecordingPapers(input:[IrecordingPaper]):[RecordingPaper]
+    deleteRecordingPaper(id:ID):String
 }
 
 
@@ -48,7 +49,7 @@ type RecordingPaper {
     actionEndTime: LocalDateTime
     actionStartTime: LocalDateTime
     actionType: String
-    glove: String
+    glove: Boolean
     location: String
     observeDepartment: String
     observeName: String
@@ -64,7 +65,7 @@ input IrecordingPaper {
     actionEndTime: LocalDateTime
     actionStartTime: LocalDateTime
     actionType: String
-    glove: String
+    glove: Boolean
     location: String
     observeDepartment: String
     observeName: String

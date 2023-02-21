@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import kr.co.has.hygiene.back_end.domain.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +68,8 @@ public class Service {
     public List<RecordingPaper> recordingPapers() {
         return recordingPaperRepository.findAll();
     }
+
+
 
 
     @Transactional
@@ -196,6 +199,16 @@ public class Service {
             recordingPaperRepository.save(recordingPaper);
         });
         return null;
+    }
+
+    public String deleteRecordingPaper(Long id) {
+        try {
+            recordingPaperRepository.deleteById(id);
+        } catch (Exception e) {
+//            throw new RuntimeException(e);
+            return e.getLocalizedMessage();
+        }
+        return "OK!";
     }
 
 
