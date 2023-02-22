@@ -65,11 +65,10 @@ public class Service {
         return recordingPaperRepository.save(input);
     }
 
+
     public List<RecordingPaper> recordingPapers() {
         return recordingPaperRepository.findAll();
     }
-
-
 
 
     @Transactional
@@ -201,7 +200,6 @@ public class Service {
 //        createRecordValidValue("세부행위", "환자접촉 후");
 
 
-
 //         createRecordValidValue("");
 
         return recordTypeRepository.findAll();
@@ -224,9 +222,16 @@ public class Service {
         return "OK!";
     }
 
-
-    //@Data
-
+    public RecordingPaper updateRecordingPaper(Long id, RecordingPaper input) {
+        input.setId(id);
+        RecordingPaper save = null;
+        try {
+            save = recordingPaperRepository.save(input);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return save;
+    }
 
 }
 

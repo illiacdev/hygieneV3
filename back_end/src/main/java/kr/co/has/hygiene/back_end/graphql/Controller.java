@@ -22,7 +22,7 @@ public class Controller {
     /////////////////////////////////////////////////////////////
     //#기준정보
     @MutationMapping
-    List<RecordType> initDB(){
+    List<RecordType> initDB() {
         return service.initDB();
     }
 
@@ -70,7 +70,7 @@ public class Controller {
 
     //기록목록 저장
     @MutationMapping
-    List<RecordingPaper>  createRecordingPapers(@Argument("input")List<RecordingPaper> paperList){
+    List<RecordingPaper> createRecordingPapers(@Argument("input") List<RecordingPaper> paperList) {
         return service.createRecordingPapers(paperList);
 
     }
@@ -81,17 +81,18 @@ public class Controller {
     }
 
     @Builder
-   static public class Node {
+    static public class Node {
         public String name;
 
-//        @Transient
+        //        @Transient
 //        public Node parent;
         @Builder.Default
         public List<Node> nodes = new ArrayList<>();
 
-        public Optional<Node> get(String name){
-            return  nodes.stream().filter(node -> node.name.equals(name)).findFirst();
+        public Optional<Node> get(String name) {
+            return nodes.stream().filter(node -> node.name.equals(name)).findFirst();
         }
+
         public Node add(Node node) {
             nodes.add(node);
             return node;
@@ -99,15 +100,21 @@ public class Controller {
 
         @Override
         public String toString() {
-            return String.format("%s - %s",name,nodes.toString());
+            return String.format("%s - %s", name, nodes.toString());
         }
     }
 
     @MutationMapping
-    public String deleteRecordingPaper(@Argument("id")Long id){
+    public String deleteRecordingPaper(@Argument("id") Long id) {
 
         return service.deleteRecordingPaper(id);
     }
+
+    @MutationMapping
+    public RecordingPaper updateRecordingPaper(@Argument("id") Long id, @Argument("input") RecordingPaper input) {
+        return service.updateRecordingPaper(id, input);
+    }
+
 
     //부서,직종,성명트리
     @QueryMapping
@@ -135,7 +142,6 @@ public class Controller {
         Node 진료지원 = root.add(Node.builder().name("진료지원").build());
 
         Node 기타 = root.add(Node.builder().name("기타").build());
-
 
 
         Node 가정의학과 = 진료부.add(Node.builder().name("가정의학과").build());

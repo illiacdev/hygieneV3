@@ -1,75 +1,10 @@
 import React, {Component} from 'react';
-import {RecordingPaper} from "../Types/RecordingPaper";
 import {Button, Table} from "antd";
-import {apollo_client} from "../../App";
-import {gql} from "@apollo/client";
-import {makeAutoObservable, makeObservable, observable} from "mobx";
 import {observer} from "mobx-react";
-import {createDecoratorAnnotation} from "mobx/dist/api/decorators";
+import {store} from "./Store";
 
 
-class Store {
-    dataSource: RecordingPaper[] = [];
-    constructor() {
-        makeAutoObservable(this);
-    }
 
-    load() {
-        apollo_client.query({
-            query:gql`
-                query {
-                    recordingPapers {
-                        id
-                        action
-                        observeDepartment
-                        observeOccupation
-                        observeName
-                        glove
-                        passFail
-                        location
-                        actionType
-                        subAction
-                        actionDuration
-                        
-
-                    }
-                }
-            `
-            ,fetchPolicy:"no-cache"
-        }).then(value => {
-            this.dataSource = value.data.recordingPapers;
-            let s = JSON.stringify(value.data.recordingPapers);
-            console.log(s);
-        }).catch(reason => {
-
-        })
-    }
-
-
-    delete(id: any) {
-        apollo_client.mutate({
-            mutation:gql`
-                mutation deleteRecordingPaper($id:ID){
-                    deleteRecordingPaper(id: $id)
-                }
-            `,
-            variables:{
-                id
-
-            }
-            ,
-            fetchPolicy:"no-cache"
-
-        }).then(value => {
-            console.log(value.data.deleteRecordingPaper);
-            this.load();
-        }).catch(reason => {
-
-        })
-    }
-}
-
-const store = new Store();
 
 const columns = [
     {

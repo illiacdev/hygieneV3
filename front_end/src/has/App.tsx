@@ -5,6 +5,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ReportPaperTable from "./components/관리자/ReportPaperTable";
 import Login from "./components/auth/Login";
 import Dev from "./experiment/Dev";
+import EditableReportPaperTable from "./components/관리자/EditableReportPaperTable";
 
 
 // const httpLink = new HttpLink({ uri: 'https://api.example.com/graphql' });
@@ -40,10 +41,12 @@ class App extends Component {
                 <Routes>
                     <Route path={"/"} element={<ComRecord/>}/>
                     <Route path={"/login"} element={<Login title={"손위생 기록지 관리시스템"}/>}/>
-                    <Route path={"/report_list"} element={<ReportPaperTable/>}/>
-                    <Route path={"/report"} element={<ReportPaperTable/>}/>
-                    <Route path={"/list"} element={<ReportPaperTable/>}/>
-                    <Route path={"/dev"} element={<Dev/>}/>
+                    <Route path={"/report_list"} element={<EditableReportPaperTable/>}/>
+                    {/*<Route path={"/edit_report_list"} element={<EditableReportPaperTable/>}/>*/}
+                    {/*<Route path={"/report"} element={<ReportPaperTable/>}/>*/}
+                    <Route path={"/list"} element={<EditableReportPaperTable/>}/>
+                    {/*<Route path={"/dev"} element={<Dev/>}/>*/}
+                    <Route path={"/dev"} element={<EditableReportPaperTable/>}/>
 
                 </Routes>
             </BrowserRouter>

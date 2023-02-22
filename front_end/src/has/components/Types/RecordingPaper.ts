@@ -6,7 +6,7 @@ export enum E_chronometer{
     Stop
 }
 export class RecordingPaper {
-    id?: number;
+    id?: string;
     observeDepartment?: string;
     observeOccupation?: string;
     observeName?: string;
@@ -21,6 +21,7 @@ export class RecordingPaper {
     passFail?: boolean = false;
     observer?: string;
 
+    key?: string;
     chronometer_state?: E_chronometer = E_chronometer.Ready;
 
     public _현재가능액션():string{

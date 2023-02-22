@@ -40,6 +40,8 @@ extend type Mutation {
     createRecordingPaper(input:IrecordingPaper!):RecordingPaper
     createRecordingPapers(input:[IrecordingPaper]):[RecordingPaper]
     deleteRecordingPaper(id:ID):String
+    updateRecordingPaper(id:ID!,input:IrecordingPaper!):RecordingPaper
+
 }
 
 
