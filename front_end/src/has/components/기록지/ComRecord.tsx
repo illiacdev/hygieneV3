@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {ComTop} from "./ComTop";
 import {store} from "./Store";
 import {observer} from 'mobx-react';
 import {ComMiddle} from "./ComMiddle";
-import {Button, Checkbox, Drawer, Form, Input, Select, Space} from "antd";
+import {Button, Checkbox, Drawer, Form, Input, InputNumber, Select, Space} from "antd";
 import {css} from "styled-components/macro";
 import {toJS} from "mobx";
 
@@ -11,7 +11,7 @@ import "./Table.css"
 import ComSelectObserver from "./ComSelectObserver";
 import {Combobox} from "react-widgets/cjs";
 import "react-widgets/styles.css";
-import {RecordingPaper} from "../Types/RecordingPaper";
+import {E_chronometer, RecordingPaper} from "../Types/RecordingPaper";
 import Optional from "optional-js";
 import _ from "lodash";
 import {Util} from "../../common/Util";
@@ -47,9 +47,11 @@ const map = new Map<string, string>([
     ["직종", "observeOccupation"],
     ["이름", "observeName"],
     ["장갑", "glove"],
-    ["수행여부", "passFail"],
+    ["수행적합성", "passFail"],
+    ["수행시간", "passFail"],
     ["장소", "location"],
-    ["행위", "actionType"],
+    ["행위", "action"],
+    ["수행여부", "actionType"],
     ["세부행위", "subAction"],
 ])
 
@@ -64,6 +66,22 @@ function getProp<TObj, K extends keyof TObj>(obj: TObj, key: K) {
 
 
 const Row = (props: { data: RecordingPaper[]; item: RecordingPaper, index: number, types: [{ name: string, type: string, recordValidValues: [{ name: string }] }] }) => {
+    let [elapsed, setElapsed] = useState(0);
+    useEffect(() => {
+        let intervalId: any = null;
+        setElapsed(props.item.obtain수행시간());
+        if (props.item.chronometer_state == E_chronometer.Run) {
+            intervalId = setInterval(args => {
+                console.log(props.index);
+                setElapsed(props.item.obtain수행시간());
+            }, 1000);
+        }
+
+        return () => {
+            Optional.ofNullable(intervalId).ifPresent(value => clearInterval(value))
+        }
+    });
+
 
     if (!props.types)
         return <></>
@@ -94,17 +112,40 @@ const Row = (props: { data: RecordingPaper[]; item: RecordingPaper, index: numbe
 
                     return Optional.ofNullable(map.get(value.name))
                         .map(fieldName => Util.getProp2(props.item, fieldName))
-                        .map(value => <td align={"center"}><Checkbox  onChange={onChange} checked={value as boolean}/></td>)
-                            .orElse(<p>{`${value.name}와(과) bind된 오브젝트 속성이 없습니다.`}</p>)
+                        .map(value => <td align={"center"}><Checkbox onChange={onChange} checked={value as boolean}/>
+                        </td>)
+                        .orElse(<p>{`${value.name}와(과) bind된 오브젝트 속성이 없습니다.`}</p>)
                 }
 
-                if (value.type == "chronometer")
+                if (value.type == "chronometer") {
+
+                    let editable = props.item.chronometer_state == E_chronometer.Stop;
                     return (
                         <>
-                            <td><Input  type={"number"}/></td>
-                            <td><Button>시작</Button></td>
+                            <td><InputNumber
+                                value={editable ? props.item.actionDuration : elapsed}
+                                onChange={(e) => {
+                                    console.log(JSON.stringify(e));
+
+                                    let actionDuration = Optional.ofNullable(e).orElse(0);
+                                    setElapsed(actionDuration);
+                                    props.item.actionDuration = actionDuration;
+                                    // props.item.actionDuration = e;
+                                }
+                                }
+                            />
+                            </td>
+                            <td><Button
+                                disabled={props.item.chronometer_state == E_chronometer.Stop}
+                                onClick={() => {
+                                    props.item.nextStateClickChronometer();
+                                    props.data[props.index] = _.cloneDeep(props.data[props.index]);
+
+                                }}>{(props.item._현재가능액션())}</Button>
+                            </td>
                         </>
-                    )
+                    );
+                }
 
 
                 if (value.type == "combobox")
@@ -117,16 +158,16 @@ const Row = (props: { data: RecordingPaper[]; item: RecordingPaper, index: numbe
                 if (value.type == "inputText") {
 
                     // return <p>{map.get(value.name)}</p>
-                   /* let onChange = (e: any) => {
-                        let e_value = e.target.value;
-                        Util.updateProp2(props.item, map.get(value.name)!, e_value);
-                        props.data[props.index] = _.cloneDeep(props.data[props.index]);
-                    }
+                    /* let onChange = (e: any) => {
+                         let e_value = e.target.value;
+                         Util.updateProp2(props.item, map.get(value.name)!, e_value);
+                         props.data[props.index] = _.cloneDeep(props.data[props.index]);
+                     }
 
-                    return Optional.ofNullable(map.get(value.name))
-                        .map(fieldName => Util.getProp2(props.item, fieldName))
-                        .map(value => <td><Input type={"text"} onChange={onChange} value={value as string}/></td>)
-                        .orElse(<p>{`${value.name}와(과) bind된 오브젝트 속성이 없습니다.`}</p>)*/
+                     return Optional.ofNullable(map.get(value.name))
+                         .map(fieldName => Util.getProp2(props.item, fieldName))
+                         .map(value => <td><Input type={"text"} onChange={onChange} value={value as string}/></td>)
+                         .orElse(<p>{`${value.name}와(과) bind된 오브젝트 속성이 없습니다.`}</p>)*/
 
 
                     type ObjectKey = keyof typeof props.item;
@@ -180,7 +221,7 @@ const Row = (props: { data: RecordingPaper[]; item: RecordingPaper, index: numbe
                             } options={items}>{value.name}</Select>
                         </td>
                     )
-                    
+
                 }
 
                 return (
@@ -188,79 +229,79 @@ const Row = (props: { data: RecordingPaper[]; item: RecordingPaper, index: numbe
                 )
             })
             }
-            <td><Button onClick={ ()=>store.delete(props.index)}>삭제</Button></td>
+            <td><Button onClick={() => store.delete(props.index)}>삭제</Button></td>
         </tr>
     )
 }
 
-    class ComRecord extends Component {
+class ComRecord extends Component {
 
-        form: any;
+    form: any;
 
 
-        componentDidMount() {
-            // store.fetchTypes("세일병원");
-            store.fetchTypes("성빈센트");
-        }
-
-        render() {
-            return (
-                <div css={css`padding: 1em`}>
-                    <ComTop/>
-                    <ComMiddle/>
-                    <div css={css`display: flex;
-                      flex-direction: row-reverse`}>
-                        <Space>
-                            <Form ref={ref => this.form = ref} initialValues={{addCount: 1}}>
-                                <Form.Item name={"addCount"}>
-                                    <Select options={[
-                                        {value: 1, label: '1명'},
-                                        {value: 2, label: '2명'},
-                                        {value: 3, label: '3명'},
-                                        {value: 4, label: '4명'},
-                                        {value: 5, label: '5명'},
-                                    ]}>
-
-                                    </Select>
-                                </Form.Item>
-                            </Form>
-                            <Button onClick={() => {
-                                let item_count = this.form.getFieldValue("addCount");
-                                console.log('fieldsValue', item_count);
-
-                                console.log('onClick!');
-                                store.add(item_count);
-
-                            }}>관찰추가</Button>
-                            <Button onClick={() => store.upload(store.data)}>업로드</Button>
-                        </Space>
-                    </div>
-                    <hr/>
-
-                    <div css={css`overflow: auto`}>
-                        <table border={1} border-collapse={"collapse"}>
-                            <HeadRow types={toJS(store.types)}/>
-                            <tbody>
-                            {store.data.map((item, index) =>
-                                <Row data={store.data} types={toJS(store.types)} index={index} item={item}/>)}
-                            </tbody>
-                        </table>
-                    </div>
-                    <Drawer width={'80%'} open={store.openDrawer} onClose={() => store.openDrawer = false}>
-                        <ComSelectObserver row_index={store.curr!} cb={(index, 부서, 직종, 성명) => {
-                            let tItem = store.data[index] as RecordingPaper;
-                            tItem!.observeName = 성명;
-                            tItem!.observeDepartment = 부서;
-                            tItem!.observeOccupation = 직종;
-                            console.log(toJS(tItem));
-                            store.openDrawer = false;
-                        }
-                        }/>
-                    </Drawer>
-                </div>
-            );
-        }
+    componentDidMount() {
+        // store.fetchTypes("세일병원");
+        store.fetchTypes("성빈센트");
     }
 
+    render() {
+        return (
+            <div css={css`padding: 1em`}>
+                <ComTop/>
+                <ComMiddle/>
+                <div css={css`display: flex;
+                  flex-direction: row-reverse`}>
+                    <Space>
+                        <Form ref={ref => this.form = ref} initialValues={{addCount: 1}}>
+                            <Form.Item name={"addCount"}>
+                                <Select options={[
+                                    {value: 1, label: '1명'},
+                                    {value: 2, label: '2명'},
+                                    {value: 3, label: '3명'},
+                                    {value: 4, label: '4명'},
+                                    {value: 5, label: '5명'},
+                                ]}>
 
-    export default observer(ComRecord);
+                                </Select>
+                            </Form.Item>
+                        </Form>
+                        <Button onClick={() => {
+                            let item_count = this.form.getFieldValue("addCount");
+                            console.log('fieldsValue', item_count);
+
+                            console.log('onClick!');
+                            store.add(item_count);
+
+                        }}>관찰추가</Button>
+                        <Button onClick={() => store.upload(store.data)}>업로드</Button>
+                    </Space>
+                </div>
+                <hr/>
+
+                <div css={css`overflow: auto`}>
+                    <table border={1} border-collapse={"collapse"}>
+                        <HeadRow types={toJS(store.types)}/>
+                        <tbody>
+                        {store.data.map((item, index) =>
+                            <Row data={store.data} types={toJS(store.types)} index={index} item={item}/>)}
+                        </tbody>
+                    </table>
+                </div>
+                <Drawer width={'80%'} open={store.openDrawer} onClose={() => store.openDrawer = false}>
+                    <ComSelectObserver row_index={store.curr!} cb={(index, 부서, 직종, 성명) => {
+                        let tItem = store.data[index] as RecordingPaper;
+                        tItem!.observeName = 성명;
+                        tItem!.observeDepartment = 부서;
+                        tItem!.observeOccupation = 직종;
+                        console.log(toJS(tItem));
+                        store.openDrawer = false;
+                    }
+                    }/>
+                </Drawer>
+            </div>
+        );
+    }
+}
+
+
+export default observer(ComRecord);

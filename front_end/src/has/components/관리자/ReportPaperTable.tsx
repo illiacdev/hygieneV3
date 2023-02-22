@@ -29,6 +29,8 @@ class Store {
                         location
                         actionType
                         subAction
+                        actionDuration
+                        
 
                     }
                 }
@@ -114,10 +116,25 @@ const columns = [
 
     ,{
         // key: "",
+        title: "수행시간",
+        dataIndex: "actionDuration",
+        render:(item:any)=><span>{JSON.stringify(item)}</span>
+    }
+    ,{
+        // key: "",
         title: "수행여부",
+        dataIndex: "actionType",
+        // render:(item:any)=><span>{JSON.stringify(item)}</span>
+    }
+    ,{
+        // key: "",
+        title: "수행적합성",
         dataIndex: "passFail",
         render:(item:any)=><span>{JSON.stringify(item)}</span>
     }
+
+
+
     ,{
         // key: "",
         title: "",

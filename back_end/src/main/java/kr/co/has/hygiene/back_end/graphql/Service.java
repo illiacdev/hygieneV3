@@ -106,10 +106,12 @@ public class Service {
                 objects.add(recordType);
             });
 
+            //접촉전/후
             recordTypeRepository.findByName("행위").ifPresent(recordType -> {
                 objects.add(recordType);
             });
 
+            //input text
             recordTypeRepository.findByName("세부행위").ifPresent(recordType -> {
                 objects.add(recordType);
             });
@@ -122,10 +124,16 @@ public class Service {
             /*recordTypeRepository.findByName("수행종료시간").ifPresent(recordType -> {
                 objects.add(recordType);
             });*/
+
+            //손소독,손세척,마수행
             recordTypeRepository.findByName("수행여부").ifPresent(recordType -> {
                 objects.add(recordType);
             });
 
+            // pass /fail
+            recordTypeRepository.findByName("수행적합성").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
 
         }
 
@@ -177,15 +185,20 @@ public class Service {
 
         createRecord("세부행위", "inputText");
 
+        createRecord("장갑", "bool");
+
         createRecord("수행시간", "chronometer");
 
-        createRecord("장갑", "bool");
-        createRecord("수행여부", "bool");
+        createRecord("수행여부", "select");
+        createRecordValidValue("수행여부", "손소독");
+        createRecordValidValue("수행여부", "손세척");
+        createRecordValidValue("수행여부", "미수행");
+
+        createRecord("수행적합성", "bool");
 
 //        createRecord("세부행위", "text");
 //        createRecordValidValue("세부행위", "환자접촉 전");
 //        createRecordValidValue("세부행위", "환자접촉 후");
-
 
 
 

@@ -46,8 +46,9 @@ extend type Mutation {
 type RecordingPaper {
     id: ID
     action: String
-    actionEndTime: LocalDateTime
+#    actionEndTime: LocalDateTime
     actionStartTime: LocalDateTime
+    actionDuration:Int
     actionType: String
     glove: Boolean
     location: String
@@ -62,8 +63,8 @@ type RecordingPaper {
 
 input IrecordingPaper {
     action: String
-    actionEndTime: LocalDateTime
     actionStartTime: LocalDateTime
+    actionDuration:Int
     actionType: String
     glove: Boolean
     location: String
