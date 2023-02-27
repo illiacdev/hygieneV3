@@ -15,6 +15,7 @@ import {E_chronometer, RecordingPaper} from "../Types/RecordingPaper";
 import Optional from "optional-js";
 import _ from "lodash";
 import {Util} from "../../common/Util";
+import {withRouter} from "../../common/UtilCompo";
 
 
 const HeadRow = (props: { types: [{ name: string, type: string, recordValidValues: [{ name: string }] }] }) => {
@@ -234,21 +235,58 @@ const Row = (props: { data: RecordingPaper[]; item: RecordingPaper, index: numbe
     )
 }
 
-class ComRecord extends Component {
+class ComRecord extends Component<any,any> {
 
     form: any;
 
+    state ={name: ""}
 
     componentDidMount() {
+        switch (this.props.params?.id){
+            case "saeil":
+                this.setState({name:"세일병원"})
+                store.fetchTypes("세일병원");
+                break;
+
+            case "seoul_paik":
+                this.setState({name:"서울백병원"})
+                store.fetchTypes("서울백병원");
+                break;
+
+            case "vincent":
+                this.setState({name:"성빈센트병원"})
+                store.fetchTypes("성빈센트");
+                break;
+
+            default:
+                store.fetchTypes("성빈센트");
+        }
         // store.fetchTypes("세일병원");
-        store.fetchTypes("성빈센트");
+        // store.fetchTypes("성빈센트");
+        /*if(this.props.params?.id == "saeil"){
+            store.fetchTypes("세일병원");
+            return;
+        }
+
+        if(this.props.params?.id == "seoul_paik"){
+            store.fetchTypes("서울백병원");
+            return;
+        }
+
+        if(this.props.params?.id == "vincent"){
+            store.fetchTypes("성빈센트");
+            return;
+        }
+
+        store.fetchTypes("성빈센트");*/
+
     }
 
     render() {
         return (
             <div css={css`padding: 1em`}>
                 <ComTop/>
-                <ComMiddle/>
+                <ComMiddle name={this.state.name}/>
                 <div css={css`display: flex;
                   flex-direction: row-reverse`}>
                     <Space>
@@ -303,5 +341,5 @@ class ComRecord extends Component {
     }
 }
 
-
-export default observer(ComRecord);
+// withRouter()
+export default withRouter(observer(ComRecord));

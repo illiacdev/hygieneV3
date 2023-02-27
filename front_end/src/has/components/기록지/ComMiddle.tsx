@@ -1,7 +1,7 @@
 import {css} from "styled-components/macro";
 import dayjs,{Dayjs} from  'dayjs'
 import {Button} from "antd";
-export const ComMiddle = () => {
+export const ComMiddle = (props:{name?:string}) => {
     return (
         <div css={css`display: flex;
           padding-left: 1em;
@@ -15,7 +15,7 @@ export const ComMiddle = () => {
               display: flex;
               flex-direction: column;
               justify-content: space-evenly`}>
-                <div css={css`;`}> 기관명 : 병원</div>
+                <div css={css`;`}> 기관명 : {props.name || ""}</div>
                <div css={css``}> 현재시간 : {dayjs().format('YYYY년 MM월 DD일 HH:mm')}</div>
             </div>
 

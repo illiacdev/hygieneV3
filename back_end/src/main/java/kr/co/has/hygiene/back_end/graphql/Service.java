@@ -88,7 +88,7 @@ public class Service {
 //            return recordTypeRepository.findByNameIn(Arrays.asList("부서", "직종", "이름", "장소", "행위", "장갑","수행시작시간","수행종료시간","수행여부"));
 
         ArrayList<RecordType> objects = new ArrayList<>();
-        if (templateName.equals("성빈센트")) {
+        if (templateName.equals("성빈센트") || templateName.equals("서울백병원")) {
            /* recordTypeRepository.findByName("부서").ifPresent(recordType -> {
                 objects.add(recordType);
             });
@@ -163,6 +163,10 @@ public class Service {
                 objects.add(recordType);
             });
 
+            //손소독,손세척,마수행
+            recordTypeRepository.findByName("수행여부").ifPresent(recordType -> {
+                objects.add(recordType);
+            });
 
         }
 

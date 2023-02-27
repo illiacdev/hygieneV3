@@ -6,6 +6,8 @@ import ReportPaperTable from "./components/관리자/ReportPaperTable";
 import Login from "./components/auth/Login";
 import Dev from "./experiment/Dev";
 import EditableReportPaperTable from "./components/관리자/EditableReportPaperTable";
+import Config from "./components/관리자/설정/Config";
+import DomainHome from "./experiment/DomainHome";
 
 
 // const httpLink = new HttpLink({ uri: 'https://api.example.com/graphql' });
@@ -39,7 +41,10 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route path={"/"} element={<ComRecord/>}/>
+                    <Route path={"/:id"} element={<ComRecord/>}/>
+                    <Route path="/:id" element={<DomainHome/>} />
+                    <Route path={"/config"} element={<Config/>}/>
+
                     <Route path={"/login"} element={<Login title={"손위생 기록지 관리시스템"}/>}/>
                     <Route path={"/report_list"} element={<EditableReportPaperTable/>}/>
                     {/*<Route path={"/edit_report_list"} element={<EditableReportPaperTable/>}/>*/}

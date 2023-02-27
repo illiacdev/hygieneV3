@@ -9,7 +9,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import reactor.core.publisher.Mono;
+
+import java.util.Arrays;
 
 @Configuration
 @AllArgsConstructor
@@ -30,6 +35,7 @@ public class WebSecurityConfig {
                         Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN))
                 ).and()
                 .csrf().disable()
+//                .cors().configurationSource(corsConfigurationSource()).and()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authenticationManager(authenticationManager)
@@ -39,6 +45,7 @@ public class WebSecurityConfig {
                 .pathMatchers("/api/login").permitAll()
                 .pathMatchers("/api/login2").permitAll()
                 .pathMatchers("/api/info").permitAll()
+                .pathMatchers("/api/upload").permitAll()
                 .pathMatchers("/graphql").permitAll()
                 .pathMatchers("/api/*").permitAll()
 //                .pathMatchers("/api/upload").permitAll()
@@ -46,5 +53,16 @@ public class WebSecurityConfig {
 //                .pathMatchers("/graphql").permitAll()
                 .anyExchange().authenticated()
                 .and().build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS", "PUT","DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
