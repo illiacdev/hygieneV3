@@ -1,4 +1,4 @@
-import {Button, Form, FormInstance} from 'antd';
+import {Button, Form, FormInstance, Input} from 'antd';
 import React, {Component} from 'react';
 import {css} from "styled-components/macro";
 import axios from "axios";
@@ -45,10 +45,17 @@ class Login extends Component<{ navigate: NavigateFunction,title?:string }, any>
                         // initialValues={{id:"admin",password:"1234"}}
                         ref={(ref: FormInstance) => this.form = ref}>
                         <Form.Item name={"id"}>
-                            <input placeholder={"아이디"}/>
+                            <Input placeholder={"아이디"} onPressEnter={()=>{
+
+                            }
+                            }/>
                         </Form.Item>
                         <Form.Item name={"password"}>
-                            <input placeholder={"패스워드"} type={"password"}/>
+                            <Input placeholder={"패스워드"} type={"password"} onPressEnter={()=>{
+                                let fieldsValue = this.form.getFieldsValue();
+                                this.login(fieldsValue.id, fieldsValue.password);
+                            }
+                            }/>
                         </Form.Item>
 
                         <Button onClick={event => {

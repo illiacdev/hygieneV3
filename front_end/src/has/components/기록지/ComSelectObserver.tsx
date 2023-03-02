@@ -62,15 +62,19 @@ const TreeNodes = (props: { nodes: Node[],row_index:number }) => {
                                         let depth = calcDepth(chiledNode, 0);
                                         console.log('calcDepth', depth);
 
-                                        if ((chiledNode.myDepth() >= 3) && (chiledNode.isTerminalNode())) {
+                                        if ((chiledNode.myDepth() >= 2) && (chiledNode.isTerminalNode())) {
                                         // if ((depth >= 3) && (chiledNode.nodes.length == 0)) {
-                                            localStore.부서 = chiledNode.parent!.parent!.name;
+                                            /*localStore.부서 = chiledNode.parent!.parent!.name;
                                             localStore.직종 = chiledNode.parent!.name;
-                                            localStore.이름 = chiledNode.name;
+                                            localStore.이름 = chiledNode.name;*/
+                                            localStore.부서 = chiledNode.parent!.name;
+                                            localStore.직종 = chiledNode.name;
+                                            // localStore.이름 = chiledNode.name;
+
                                         } else {
                                             localStore.부서 = "";
                                             localStore.직종 = "";
-                                            localStore.이름 = "";
+                                            // localStore.이름 = "";
                                         }
                                         // localStore.nodes[index + 1] = chiledNode;
                                     }
@@ -146,7 +150,7 @@ const TreeNodes = (props: { nodes: Node[],row_index:number }) => {
                 localStore.root = new Node("root", null);
                 localStore.nodes = [];
 
-                nodes = tree_file.nodes;
+                // nodes = tree_file.nodes;
                 init(localStore.root, nodes);
                 localStore.nodes.push(localStore.root);
                 console.log(localStore.root);

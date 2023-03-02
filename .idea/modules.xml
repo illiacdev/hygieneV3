@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/WorkSpace.hygieneV3.back_end.main.iml" filepath="$PROJECT_DIR$/.idea/modules/WorkSpace.hygieneV3.back_end.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/back_end.main.iml" filepath="$PROJECT_DIR$/.idea/modules/back_end.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/back_end.test.iml" filepath="$PROJECT_DIR$/.idea/modules/back_end.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.example.back_end.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.example.back_end.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/front_end.iml" filepath="$PROJECT_DIR$/front_end.iml" />
       <module fileurl="file://$PROJECT_DIR$/hygiene.iml" filepath="$PROJECT_DIR$/hygiene.iml" />

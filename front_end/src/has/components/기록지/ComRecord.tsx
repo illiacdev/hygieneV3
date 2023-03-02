@@ -26,7 +26,7 @@ const HeadRow = (props: { types: [{ name: string, type: string, recordValidValue
             <th>관찰대상선택</th>
             <th>부서</th>
             <th>직종</th>
-            <th>성명</th>
+            {/*<th>성명</th>*/}
             {props.types.map(value => {
                 if (value.name === "수행시간")
                     return (
@@ -47,7 +47,7 @@ const HeadRow = (props: { types: [{ name: string, type: string, recordValidValue
 const map = new Map<string, string>([
     ["부서", "observeDepartment"],
     ["직종", "observeOccupation"],
-    ["이름", "observeName"],
+    ["성명", "observeName"],
     ["장갑", "glove"],
     ["수행적합성", "passFail"],
     ["수행시간", "passFail"],
@@ -102,7 +102,7 @@ const Row = (props: { data: RecordingPaper[]; item: RecordingPaper, index: numbe
 
             <td>{observeDepartment}</td>
             <td>{observeOccupation}</td>
-            <td>{observeName}</td>
+            {/*<td>{observeName}</td>*/}
             {props.types.map(value => {
 
                 if (value.type == "bool") {

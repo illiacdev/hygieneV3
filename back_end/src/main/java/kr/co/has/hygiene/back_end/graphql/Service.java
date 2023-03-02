@@ -89,17 +89,17 @@ public class Service {
 
         ArrayList<RecordType> objects = new ArrayList<>();
         if (templateName.equals("성빈센트병원") || templateName.equals("서울백병원")) {
-           /* recordTypeRepository.findByName("부서").ifPresent(recordType -> {
+//            recordTypeRepository.findByName("부서").ifPresent(recordType -> {
+//                objects.add(recordType);
+//            });
+
+//            recordTypeRepository.findByName("직종").ifPresent(recordType -> {
+//                objects.add(recordType);
+//            });
+
+            recordTypeRepository.findByName("성명").ifPresent(recordType -> {
                 objects.add(recordType);
             });
-
-            recordTypeRepository.findByName("직종").ifPresent(recordType -> {
-                objects.add(recordType);
-            });
-
-            recordTypeRepository.findByName("이름").ifPresent(recordType -> {
-                objects.add(recordType);
-            });*/
 
 //            recordTypeRepository.findByName("장소").ifPresent(recordType -> {
 //                objects.add(recordType);
@@ -184,6 +184,9 @@ public class Service {
 
         createRecord("행위", "select");
         createRecordValidValue("행위", "환자접촉 전");
+        createRecordValidValue("행위", "무균적 시술전");
+        createRecordValidValue("행위", "체액 및 분비물 접촉 후");
+        createRecordValidValue("행위", "주변환경 접촉 후");
         createRecordValidValue("행위", "환자접촉 후");
 
 //        createRecord("세부행위", "inputText");
