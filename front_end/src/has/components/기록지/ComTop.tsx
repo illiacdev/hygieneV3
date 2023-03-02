@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import {css} from "styled-components/macro";
-import logo from '../../resources/logo.png';
+// import logo from '../../../asset/성빈센트.png';
+// import logo from '../../../asset/세일병원.png';
+import logo from '../../../asset/인제대서울백병원.png';
 import {Button} from "antd";
 import {useNavigate} from "react-router-dom";
 
@@ -24,19 +26,18 @@ export const ComTop = () => {
               object-fit: contain`}/>
 
             <div css={css`width: 100%`}>
-                <div css={css`width: 100%;
-                  height: 1.5em;
-                  background: #0054a5`}></div>
+                {/*<div css={css`width: 100%; height: 1.5em; background: #0054a5`}></div>*/}
                 <div css={css`display: flex;
-                  justify-content: space-between;
+                  //justify-content: space-between;
+                  flex-direction: row-reverse;
                   font-size: .8em;
                   width: 100%`}>
-                    <StyledSpan>손위생 관찰 기록지</StyledSpan>
-                    <StyledSpan>접촉주의 체크리스트</StyledSpan>
-                    <StyledSpan>ATP Test</StyledSpan>
-                    <StyledSpan>역학조사(설문)</StyledSpan>
-                    <StyledSpan>역학조사(관리)</StyledSpan>
-                    <StyledSpan>감염관리 웹 인터페이스 Ver 1.0</StyledSpan>
+                    {/*<StyledSpan>손위생 관찰 기록지</StyledSpan>*/}
+                    {/*<StyledSpan>접촉주의 체크리스트</StyledSpan>*/}
+                    {/*<StyledSpan>ATP Test</StyledSpan>*/}
+                    {/*<StyledSpan>역학조사(설문)</StyledSpan>*/}
+                    {/*<StyledSpan>역학조사(관리)</StyledSpan>*/}
+                    {/*<StyledSpan>감염관리 웹 인터페이스 Ver 1.0</StyledSpan>*/}
                     <Button css={css`cursor: pointer`} onClick={event => {
                         localStorage.removeItem("auth_token");
                         navigate('/login');
