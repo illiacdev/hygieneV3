@@ -16,6 +16,7 @@ import Optional from "optional-js";
 import _ from "lodash";
 import {Util} from "../../common/Util";
 import {withRouter} from "../../common/UtilCompo";
+import {Predef} from "../Predef";
 
 
 const HeadRow = (props: { types: [{ name: string, type: string, recordValidValues: [{ name: string }] }] }) => {
@@ -242,7 +243,7 @@ class ComRecord extends Component<any,any> {
     state ={name: ""}
 
     componentDidMount() {
-        switch (this.props.params?.id){
+       /* switch (this.props.params?.id){
             case "saeil":
                 this.setState({name:"세일병원"})
                 store.fetchTypes("세일병원");
@@ -260,7 +261,7 @@ class ComRecord extends Component<any,any> {
 
             default:
                 store.fetchTypes("성빈센트");
-        }
+        }*/
         // store.fetchTypes("세일병원");
         // store.fetchTypes("성빈센트");
         /*if(this.props.params?.id == "saeil"){
@@ -279,6 +280,7 @@ class ComRecord extends Component<any,any> {
         }
 
         store.fetchTypes("성빈센트");*/
+        store.fetchTypes(Predef._병원병);
 
     }
 
@@ -286,7 +288,7 @@ class ComRecord extends Component<any,any> {
         return (
             <div css={css`padding: 1em`}>
                 <ComTop/>
-                <ComMiddle name={this.state.name}/>
+                <ComMiddle name={Predef._병원병}/>
                 <div css={css`display: flex;
                   flex-direction: row-reverse`}>
                     <Space>
@@ -342,4 +344,4 @@ class ComRecord extends Component<any,any> {
 }
 
 // withRouter()
-export default withRouter(observer(ComRecord));
+export default observer(ComRecord);

@@ -36,6 +36,7 @@ public class WebSecurityConfig {
                 ).and()
                 .csrf().disable()
 //                .cors().configurationSource(corsConfigurationSource()).and()
+                .cors().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authenticationManager(authenticationManager)

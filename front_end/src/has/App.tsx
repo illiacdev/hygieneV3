@@ -41,8 +41,8 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route path={"/:id"} element={<ComRecord/>}/>
-                    <Route path="/:id" element={<DomainHome/>} />
+                    <Route path={"/"} element={<ComRecord/>}/>
+                    {/*<Route path="/:id" element={<DomainHome/>} />*/}
                     <Route path={"/config"} element={<Config/>}/>
 
                     <Route path={"/login"} element={<Login title={"손위생 기록지 관리시스템"}/>}/>

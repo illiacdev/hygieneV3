@@ -88,7 +88,7 @@ public class Service {
 //            return recordTypeRepository.findByNameIn(Arrays.asList("부서", "직종", "이름", "장소", "행위", "장갑","수행시작시간","수행종료시간","수행여부"));
 
         ArrayList<RecordType> objects = new ArrayList<>();
-        if (templateName.equals("성빈센트") || templateName.equals("서울백병원")) {
+        if (templateName.equals("성빈센트병원") || templateName.equals("서울백병원")) {
            /* recordTypeRepository.findByName("부서").ifPresent(recordType -> {
                 objects.add(recordType);
             });
@@ -101,9 +101,9 @@ public class Service {
                 objects.add(recordType);
             });*/
 
-            recordTypeRepository.findByName("장소").ifPresent(recordType -> {
-                objects.add(recordType);
-            });
+//            recordTypeRepository.findByName("장소").ifPresent(recordType -> {
+//                objects.add(recordType);
+//            });
 
             //접촉전/후
             recordTypeRepository.findByName("행위").ifPresent(recordType -> {
@@ -186,7 +186,23 @@ public class Service {
         createRecordValidValue("행위", "환자접촉 전");
         createRecordValidValue("행위", "환자접촉 후");
 
-        createRecord("세부행위", "inputText");
+//        createRecord("세부행위", "inputText");
+        createRecord("세부행위", "select");
+        createRecordValidValue("세부행위", "지지적 행동");
+        createRecordValidValue("세부행위", "직접접촉");
+        createRecordValidValue("세부행위", "신체사정");
+        createRecordValidValue("세부행위", "투약시");
+        createRecordValidValue("세부행위", "수술 및 시술 전/후");
+        createRecordValidValue("세부행위", "점막접촉");
+        createRecordValidValue("세부행위", "피부 병변과 접촉");
+        createRecordValidValue("세부행위", "침습적 시술");
+        createRecordValidValue("세부행위", "폐쇄된 시스템 개방");
+        createRecordValidValue("세부행위", "점막 또는 피부 병변 접촉 후");
+        createRecordValidValue("세부행위", "혈액 및 체액 체액 등");
+        createRecordValidValue("세부행위", "소변, 대변 정리");
+        createRecordValidValue("세부행위", "의료기구 세척 및 정리");
+        createRecordValidValue("세부행위", "침상정리 및 의료기구 접촉후");
+
 
         createRecord("장갑", "bool");
 
