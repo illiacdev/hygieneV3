@@ -51,7 +51,7 @@ class App extends Component {
                     {/*<Route path={"/report"} element={<ReportPaperTable/>}/>*/}
                     <Route path={"/list"} element={<EditableReportPaperTable/>}/>
                     {/*<Route path={"/dev"} element={<Dev/>}/>*/}
-                    <Route path={"/dev"} element={<EditableReportPaperTable/>}/>
+                    <Route path={"/dev"} element={<Dev/>}/>
 
                 </Routes>
             </BrowserRouter>

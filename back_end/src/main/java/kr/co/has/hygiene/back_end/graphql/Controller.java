@@ -9,9 +9,12 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @AllArgsConstructor
 @org.springframework.stereotype.Controller
@@ -76,7 +79,9 @@ public class Controller {
     }
 
     @QueryMapping
-    List<RecordingPaper> recordingPapers() {
+    List<RecordingPaper> recordingPapers(
+            @Argument("beginDate") LocalDate beginDate,
+            @Argument("endDate") LocalDate endDate) {
         return service.recordingPapers();
     }
 
@@ -164,4 +169,8 @@ public class Controller {
         return s;
     }
 
+    @QueryMapping
+    List<Integer> numbers() {
+        return IntStream.range(0, 200).boxed().toList();
+    }
 }

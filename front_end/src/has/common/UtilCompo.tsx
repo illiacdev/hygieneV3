@@ -1,5 +1,6 @@
 import {useLocation, useParams} from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import {Dayjs} from "dayjs";
 
 export const withRouter = (Component:any) => {
     const Wrapper = (props:any) => {
@@ -20,3 +21,7 @@ export const withRouter = (Component:any) => {
 
     return Wrapper;
 };
+
+const dayjsDateToSTR = (date:Dayjs) =>{
+
+}

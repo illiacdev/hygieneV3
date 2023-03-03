@@ -3,6 +3,7 @@ scalar LocalDateTime
 
 type Query {
     serverTime : LocalDateTime
+    numbers :[Int]
     tree:String
 
 }
@@ -34,7 +35,7 @@ type RecordValidValue{
 
 #////////////////////////////////////////////////////////////////////////////
 extend type Query {
-    recordingPapers:[RecordingPaper]
+    recordingPapers(beginDate:LocalDate,endDate:LocalDate):[RecordingPaper]
 }
 extend type Mutation {
     createRecordingPaper(input:IrecordingPaper!):RecordingPaper

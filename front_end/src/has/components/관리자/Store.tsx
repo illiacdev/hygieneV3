@@ -26,8 +26,6 @@ class Store {
                         actionType
                         subAction
                         actionDuration
-
-
                     }
                 }
             `
