@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
     <content url="file://$MODULE_DIR$/../../back_end/src/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../back_end/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../back_end/src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../back_end/src/test/resources" type="java-test-resource" />
     </content>
+    <orderEntry type="jdk" jdkName="openjdk-18" jdkType="JavaSDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

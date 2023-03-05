@@ -100,3 +100,15 @@ type Team {
     name: String
 }
 
+#/////////////////////////////////////////////////////////
+extend type Query{
+    organizationCharters : [organizationChart]
+}
+
+
+type organizationChart{
+    description: String
+    fileName: String
+    stringfyNodeJson: String
+}
+

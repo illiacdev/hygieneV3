@@ -22,6 +22,7 @@ public class Service {
     private final RecordTypeRepository recordTypeRepository;
     private final RecordValidValueRepository recordValidValueRepository;
 
+    private final Entity조직도Repository entity조직도Repository;
 
     @Transactional
     public Optional<RecordType> recordType(String typeName) {
@@ -88,7 +89,7 @@ public class Service {
 //            return recordTypeRepository.findByNameIn(Arrays.asList("부서", "직종", "이름", "장소", "행위", "장갑","수행시작시간","수행종료시간","수행여부"));
 
         ArrayList<RecordType> objects = new ArrayList<>();
-        if (templateName.equals("성빈센트병원") || templateName.equals("서울백병원")) {
+        if (templateName.equals("성빈센트병원") || templateName.equals("인제대학교서울백병원")) {
 //            recordTypeRepository.findByName("부서").ifPresent(recordType -> {
 //                objects.add(recordType);
 //            });
@@ -256,5 +257,17 @@ public class Service {
         return save;
     }
 
+    public List<Entity조직도> organizationCharters() {
+        List<Entity조직도> all = entity조직도Repository.findAll();
+        return all;
+
+    }
+
+    public String tree() {
+        List<Entity조직도> all = entity조직도Repository.findAll();
+        if(all.size() > 0)
+            return all.get(0).getStringfyNodeJson();
+        return null;
+    }
 }
 

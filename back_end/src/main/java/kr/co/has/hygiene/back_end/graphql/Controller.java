@@ -1,8 +1,10 @@
 package kr.co.has.hygiene.back_end.graphql;
 
 import com.google.gson.Gson;
+import kr.co.has.hygiene.back_end.domain.Entity조직도;
 import kr.co.has.hygiene.back_end.domain.RecordType;
 import kr.co.has.hygiene.back_end.domain.RecordingPaper;
+import kr.co.has.hygiene.back_end.types.Node;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -80,29 +82,6 @@ public class Controller {
         return service.recordingPapers();
     }
 
-    @Builder
-    static public class Node {
-        public String name;
-
-        //        @Transient
-//        public Node parent;
-        @Builder.Default
-        public List<Node> nodes = new ArrayList<>();
-
-        public Optional<Node> get(String name) {
-            return nodes.stream().filter(node -> node.name.equals(name)).findFirst();
-        }
-
-        public Node add(Node node) {
-            nodes.add(node);
-            return node;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("%s - %s", name, nodes.toString());
-        }
-    }
 
     @MutationMapping
     public String deleteRecordingPaper(@Argument("id") Long id) {
@@ -119,6 +98,11 @@ public class Controller {
     //부서,직종,성명트리
     @QueryMapping
     String tree() {
+
+
+        String tree = service.tree();
+        if (tree != null)
+            return tree;
        /* Node root = Node.builder().name("root").build();
         Node 간호부 = root.add(Node.builder().name("간호부").parent(root).build());
         Node 진료부 = root.add(Node.builder().name("진료부").parent(root).build());
@@ -328,4 +312,9 @@ public class Controller {
         return s;
     }
 
+    @QueryMapping
+    List<Entity조직도> organizationCharters() {
+        List<Entity조직도> entity조직도s = service.organizationCharters();
+        return entity조직도s;
+    }
 }

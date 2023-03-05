@@ -37,9 +37,9 @@ class _조직도업로드 extends Component {
     render() {
         return (
             <div>
-                <Upload>
+               {/* <Upload>
                     <Button icon={<UploadOutlined/>}>조직도 엑셀파일 업로드</Button>
-                </Upload>
+                </Upload>*/}
 
                 <input ref={ref => this.ref = ref} type={"file"}
 

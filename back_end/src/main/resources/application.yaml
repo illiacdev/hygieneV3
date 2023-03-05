@@ -25,6 +25,9 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/hygiene?useSSL=false&useUnicode=true&characterEncoding=utf8
     username: root
+#    url: jdbc:mysql://localhost:3307/hygiene_서울백병원?useSSL=false&useUnicode=true&characterEncoding=utf8
+#    username: admin
+#    password: hasdev1234
 
 ---
 spring:
