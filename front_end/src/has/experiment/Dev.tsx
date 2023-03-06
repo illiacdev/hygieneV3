@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {css} from 'styled-components/macro';
 import {makeAutoObservable} from "mobx";
 import {Checkbox} from "antd";
 import {observer} from "mobx-react";
 import _ from "lodash";
+import {css} from 'styled-components/macro';
+import styled from "styled-components";
 
 
 class A {
@@ -24,12 +25,12 @@ function updateProp<TObj, K extends keyof TObj>(obj: TObj, key: K, value: TObj[K
 }
 
 function getProp<TObj, K extends keyof TObj>(obj: TObj, key: K) {
-    return obj[key] ;
+    return obj[key];
 }
 
 const store = new Store();
 
-const CompoTemp = (props:{a:A})=>{
+const CompoTemp = (props: { a: A }) => {
     return (
         <div>
             {JSON.stringify(props.a.checked)}
@@ -48,21 +49,63 @@ const CompoTemp = (props:{a:A})=>{
         </div>
     );
 }
-class Dev extends Component {
+
+
+class LayoutTest extends Component<any, any> {
+
     render() {
         return (
             <div css={css`font-size: 3em`}>
-                <div css={css`background: yellow;display: flex;flex-direction: row;justify-content: space-between`}>
+                <div css={css`background: yellow;
+                  display: flex;
+                  flex-direction: row;
+                  justify-content: space-between`}>
                     <span css={css`background: red`}>Hello!!!!!!!!!!!!!!!!!!</span>
 
                     <span css={css`background: red`}>Hello</span>
                 </div>
-                <div css={css`display: flex;justify-content: center;position: relative;top: -1.4em`}>
+                <div css={css`display: flex;
+                  justify-content: center;
+                  position: relative;
+                  top: -1.4em`}>
                     <span>Hello</span>
                 </div>
 
                 <CompoTemp a={store.a}/>
 
+            </div>
+        );
+    }
+}
+
+const StyledDiv = styled.div`
+  border: #282c34 solid 1px;
+  //width: 200px;
+  // height: 100px;
+  ${p => p.css}
+
+`
+
+class GridTest extends Component<any, any> {
+
+    render() {
+        return (
+            <div css={css`display: grid;grid-template-columns: 1fr 1fr`}>
+                <StyledDiv css={css`background: red`}>테스트</StyledDiv>
+                <StyledDiv css={css`background: green`}>테스트</StyledDiv>
+                <StyledDiv css={css`background: blue`}>테스트</StyledDiv>
+                <StyledDiv css={css`background: pink`}>테스트</StyledDiv>
+
+            </div>
+        );
+    }
+}
+
+class Dev extends Component {
+    render() {
+        return (
+            <div>
+                <GridTest/>
             </div>
         );
     }

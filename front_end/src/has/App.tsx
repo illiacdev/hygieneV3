@@ -5,7 +5,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ReportPaperTable from "./components/관리자/ReportPaperTable";
 import Login from "./components/auth/Login";
 import Dev from "./experiment/Dev";
-import EditableReportPaperTable from "./components/관리자/EditableReportPaperTable";
+import EditableReportPaperTable from "./components/관리자/리포트/EditableReportPaperTable";
 import Config from "./components/관리자/설정/Config";
 import DomainHome from "./experiment/DomainHome";
 
@@ -50,8 +50,7 @@ class App extends Component {
                     {/*<Route path={"/edit_report_list"} element={<EditableReportPaperTable/>}/>*/}
                     {/*<Route path={"/report"} element={<ReportPaperTable/>}/>*/}
                     <Route path={"/list"} element={<EditableReportPaperTable/>}/>
-                    {/*<Route path={"/dev"} element={<Dev/>}/>*/}
-                    <Route path={"/dev"} element={<EditableReportPaperTable/>}/>
+                    <Route path={"/dev"} element={<Dev/>}/>
 
                 </Routes>
             </BrowserRouter>

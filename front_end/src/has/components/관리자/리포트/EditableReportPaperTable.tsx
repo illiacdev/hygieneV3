@@ -3,10 +3,12 @@ import {gql} from "@apollo/client";
 import {Button, DatePicker, Form, Input, InputNumber, Table, Typography} from "antd";
 import {observer} from "mobx-react";
 import {toJS} from "mobx";
-import {store} from './Store'
-import {RecordingPaper} from "../Types/RecordingPaper";
-import _조직도업로드 from "./설정/_조직도업로드";
+import {store} from '../Store'
+import {RecordingPaper} from "../../Types/RecordingPaper";
+import _조직도업로드 from "../설정/_조직도업로드";
 import ReportGenOption from "./ReportGenOption";
+import Top from "./Top";
+import {css} from "styled-components/macro";
 
 /*
 interface Item {
@@ -265,14 +267,15 @@ class EditableReportPaperTable extends Component {
                     this.fetch_dataSource()
                 }
                 }>로드</Button>*/}
-                <_조직도업로드/>
+               {/* <_조직도업로드/>
 
 
-                <ReportGenOption columns={this.columns}/>
+                <ReportGenOption columns={this.columns}/>*/}
+                <Top columns={this.columns}/>
                 <Form ref={ref => this.form = ref}>
-                    <Form.Item label={"조회기간"}>
+                    <div css={css`padding: 1em`}><Form.Item label={"조회기간"}>
                         <DatePicker.RangePicker/>
-                    </Form.Item>
+                    </Form.Item></div>
                     <Table
                         components={{
                             body: {
