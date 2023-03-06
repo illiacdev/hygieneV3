@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import {css} from "styled-components/macro";
 // import logo from '../../../asset/성빈센트병원.png';
-import logo from '../../../asset/세일병원.png';
-// import logo from '../../../asset/인제대서울백병원.png';
+// import logo from '../../../asset/세일병원.png';
+import logo from '../../../asset/인제대서울백병원.png';
 import {Button} from "antd";
 import {useNavigate} from "react-router-dom";
 
