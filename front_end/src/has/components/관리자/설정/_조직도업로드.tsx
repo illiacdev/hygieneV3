@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Button, Upload} from "antd";
 import {UploadOutlined} from "@ant-design/icons";
 import axios from 'axios';
+import { css } from 'styled-components/macro';
 
 class _조직도업로드 extends Component {
     file: any = null;
@@ -36,7 +37,8 @@ class _조직도업로드 extends Component {
 
     render() {
         return (
-            <div>
+            <div css={css`padding: 1em`}>
+                
                {/* <Upload>
                     <Button icon={<UploadOutlined/>}>조직도 엑셀파일 업로드</Button>
                 </Upload>*/}
@@ -54,7 +56,8 @@ class _조직도업로드 extends Component {
                 <Button onClick={() => {
                     this.upload(this.file);
                 }
-                }>업로드</Button>
+
+                }>조직도 업로드</Button>
 
             </div>
         );

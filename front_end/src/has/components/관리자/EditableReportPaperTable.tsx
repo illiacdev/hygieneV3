@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {gql} from "@apollo/client";
-import {Button, Form, Input, InputNumber, Table, Typography} from "antd";
+import {Button, DatePicker, Form, Input, InputNumber, Table, Typography} from "antd";
 import {observer} from "mobx-react";
 import {toJS} from "mobx";
 import {store} from './Store'
 import {RecordingPaper} from "../Types/RecordingPaper";
+import _조직도업로드 from "./설정/_조직도업로드";
+import ReportGenOption from "./ReportGenOption";
+
 /*
 interface Item {
     key: string;
@@ -20,7 +23,7 @@ interface Item {
 
 }*/
 
-class Item extends RecordingPaper{
+class Item extends RecordingPaper {
     key?: string;
 
 
@@ -90,35 +93,35 @@ class EditableReportPaperTable extends Component {
             title: "직종",
             dataIndex: "observeOccupation",
             editable: true,
-        },{
+        }, {
             // key: "",
             title: "성명",
             dataIndex: "observeName",
             editable: true,
         }
 
-        ,{
+        , {
             // key: "",
             title: "장소",
             dataIndex: "location",
             editable: true,
         }
 
-        ,{
+        , {
             // key: "",
             title: "행위",
             dataIndex: "actionType",
             editable: true,
         }
 
-        ,{
+        , {
             // key: "",
             title: "세부행위",
             dataIndex: "subAction",
             editable: true,
         }
 
-        ,{
+        , {
             // key: "",
             title: "장갑",
             dataIndex: "glove",
@@ -126,21 +129,21 @@ class EditableReportPaperTable extends Component {
             editable: true,
         }
 
-        ,{
+        , {
             // key: "",
             title: "수행시간",
             dataIndex: "actionDuration",
             // render:(item:any)=><span>{JSON.stringify(item)}</span>
             editable: true,
         }
-        ,{
+        , {
             // key: "",
             title: "수행여부",
             dataIndex: "actionType",
             // render:(item:any)=><span>{JSON.stringify(item)}</span>
             editable: true,
         }
-        ,{
+        , {
             // key: "",
             title: "수행적합성",
             dataIndex: "passFail",
@@ -150,13 +153,14 @@ class EditableReportPaperTable extends Component {
         ,
         {
             title: 'operation',
-            dataIndex: 'operation',
+            // dataIndex: 'operation',
             render: (_: any, record: Item) => {
                 let editable = this.isEditing(record);
 
                 let that = this;
 
-                console.log("TAGeditable",editable)
+                console.log("TAGeditable", editable)
+
                 function edit(record: Item) {
                     let test = {...that.state, editingKey: record.key}
                     // console.log("TAG_EDIT", JSON.stringify(test));
@@ -175,7 +179,7 @@ class EditableReportPaperTable extends Component {
                 }
 
                 function save(item: Item) {
-                    console.log('save',item);
+                    console.log('save', item);
                     store.save(item);
                     // store.updateIngredientWarehousingSimple(item);
                 }
@@ -186,7 +190,7 @@ class EditableReportPaperTable extends Component {
                     <span>
                         {/*<p>{JSON.stringify(record)}</p>*/}
                         <Typography.Link onClick={() => {
-                            let fielsdsValue:Item = that.form.getFieldsValue();
+                            let fielsdsValue: Item = that.form.getFieldsValue();
                             fielsdsValue.id = record.id;
                             save(fielsdsValue);
                             cancel();
@@ -213,15 +217,15 @@ class EditableReportPaperTable extends Component {
                 );
             },
         }
-        ,{
+        , {
             // key: "",
             title: "",
             dataIndex: "id",
-            render:(item:any)=><Button onClick={()=>store.delete(item)} >삭제</Button>
+            render: (item: any) => <Button onClick={() => store.delete(item)}>삭제</Button>
         }
 
     ]
-;
+    ;
 
     isEditing = (record: Item) => {
         console.log("TAGisEditing key 1", record.key)
@@ -261,7 +265,14 @@ class EditableReportPaperTable extends Component {
                     this.fetch_dataSource()
                 }
                 }>로드</Button>*/}
+                <_조직도업로드/>
+
+
+                <ReportGenOption columns={this.columns}/>
                 <Form ref={ref => this.form = ref}>
+                    <Form.Item label={"조회기간"}>
+                        <DatePicker.RangePicker/>
+                    </Form.Item>
                     <Table
                         components={{
                             body: {
